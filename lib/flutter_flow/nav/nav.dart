@@ -79,14 +79,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
+      errorBuilder: (context, state) => RootPageContext.wrap(
+        appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
+        errorRoute: state.uri.toString(),
+      ),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) =>
-              appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
+          builder: (context, _) => RootPageContext.wrap(
+            appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
+          ),
         ),
         FFRoute(
           name: CreateAccountWidget.routeName,
@@ -131,6 +134,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: ItemLostFormWidget.routeName,
           path: ItemLostFormWidget.routePath,
+          requireAuth: true,
           builder: (context, params) => ItemLostFormWidget(),
         ),
         FFRoute(
@@ -154,12 +158,24 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     disableResizeToAvoidBottomInset: true,
                   )),
         FFRoute(
-          name: MyFoundItemsWidget.routeName,
-          path: MyFoundItemsWidget.routePath,
+          name: MyItemsWidget.routeName,
+          path: MyItemsWidget.routePath,
           requireAuth: true,
           builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'myFoundItems')
-              : MyFoundItemsWidget(),
+              ? NavBarPage(initialPage: 'myItems')
+              : MyItemsWidget(),
+        ),
+        FFRoute(
+          name: MyClaimsWidget.routeName,
+          path: MyClaimsWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'myClaims')
+              : MyClaimsWidget(),
+        ),
+        FFRoute(
+          name: UserNotificationsWidget.routeName,
+          path: UserNotificationsWidget.routePath,
+          builder: (context, params) => UserNotificationsWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

@@ -159,7 +159,8 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'dashboard': DashboardWidget(),
-      'myFoundItems': MyFoundItemsWidget(),
+      'myItems': MyItemsWidget(),
+      'myClaims': MyClaimsWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -202,6 +203,16 @@ class _NavBarPageState extends State<NavBarPage> {
                     ? FFIcons.kbxsNotepad
                     : FFIcons.knotepadBold,
                 text: 'My Items',
+                textStyle: GoogleFonts.outfit(
+                  color: FlutterFlowTheme.of(context).info,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13.0,
+                ),
+                iconSize: 16.0,
+              ),
+              GButton(
+                icon: currentIndex == 2 ? FFIcons.kuser : FFIcons.kuser,
+                text: 'My Claims',
                 textStyle: GoogleFonts.outfit(
                   color: FlutterFlowTheme.of(context).info,
                   fontWeight: FontWeight.w600,

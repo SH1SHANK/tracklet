@@ -5,11 +5,12 @@ export '../supabase.dart';
 export 'row.dart';
 export 'table.dart';
 
-export 'tables/conversation_participants.dart';
-export 'tables/item_locations.dart';
-export 'tables/onesignal_devices.dart';
-export 'tables/messages.dart';
-export 'tables/users.dart';
+export 'tables/feed_items.dart';
+export 'tables/claims.dart';
+export 'tables/feed_found_items.dart';
+export 'tables/flags.dart';
+export 'tables/user_items_summary.dart';
+export 'tables/active_items.dart';
+export 'tables/feed_lost_items.dart';
 export 'tables/categories.dart';
-export 'tables/conversations.dart';
 export 'tables/items.dart';

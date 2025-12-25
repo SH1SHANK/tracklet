@@ -13,4 +13,7 @@ export '/onboarding/forgot_password_email_sent/forgot_password_email_sent_widget
 export '/item_lost_form/item_lost_form_widget.dart' show ItemLostFormWidget;
 export '/user_settings/user_settings_widget.dart' show UserSettingsWidget;
 export '/dashboard/dashboard_widget.dart' show DashboardWidget;
-export '/my_found_items/my_found_items_widget.dart' show MyFoundItemsWidget;
+export '/my_items/my_items_widget.dart' show MyItemsWidget;
+export '/my_claims/my_claims_widget.dart' show MyClaimsWidget;
+export '/user_notifications/user_notifications_widget.dart'
+    show UserNotificationsWidget;

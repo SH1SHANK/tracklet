@@ -48,176 +48,189 @@ class _ForgotPasswordEmailSentWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Align(
-                alignment: AlignmentDirectional(0.0, 0.0),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 100.0, 0.0, 0.0),
-                  child: Lottie.asset(
-                    'assets/jsons/Animation_1746766287328.json',
-                    width: 200.0,
-                    height: 200.0,
-                    fit: BoxFit.contain,
-                    repeat: false,
-                    animate: true,
+    return Title(
+        title: 'forgotPasswordEmailSent',
+        color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Scaffold(
+            key: scaffoldKey,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            body: SafeArea(
+              top: true,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional(0.0, 0.0),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 100.0, 0.0, 0.0),
+                      child: Lottie.asset(
+                        'assets/jsons/Animation_1746766287328.json',
+                        width: 200.0,
+                        height: 200.0,
+                        fit: BoxFit.contain,
+                        repeat: false,
+                        animate: true,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                child: RichText(
-                  textScaler: MediaQuery.of(context).textScaler,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Your reset request is on its way!\n',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.outfit(
-                                fontWeight: FontWeight.w500,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontStyle,
-                              ),
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontStyle,
-                            ),
-                      ),
-                      TextSpan(
-                        text:
-                            'It might be hiding in Promotions or Spam,\nso don’t forget to check there. \n',
-                        style: TextStyle(),
-                      ),
-                      TextSpan(
-                        text: 'Still missing? No worries \n Just hit ',
-                        style: TextStyle(),
-                      ),
-                      TextSpan(
-                        text: '‘Resend’ ',
-                        style: GoogleFonts.outfit(
-                          color: FlutterFlowTheme.of(context).tertiary,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'and we’ve got you covered.',
-                        style: TextStyle(),
-                      )
-                    ],
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.outfit(
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                    child: RichText(
+                      textScaler: MediaQuery.of(context).textScaler,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Your reset request is on its way!\n',
+                            style: FlutterFlowTheme.of(context)
                                 .bodyMedium
-                                .fontStyle,
-                          ),
-                          letterSpacing: 0.0,
-                          fontWeight: FontWeight.w500,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                        ),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-                child: RichText(
-                  textScaler: MediaQuery.of(context).textScaler,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Didn’t show up? ',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.outfit(
-                                fontWeight: FontWeight.w500,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontStyle,
-                              ),
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontStyle,
-                            ),
-                      ),
-                      TextSpan(
-                        text: 'Resend Mail',
-                        style: GoogleFonts.outfit(
-                          color: FlutterFlowTheme.of(context).primary,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        mouseCursor: SystemMouseCursors.click,
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () async {
-                            if (widget.email!.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Email required!',
-                                  ),
-                                ),
-                              );
-                              return;
-                            }
-                            await authManager.resetPassword(
-                              email: widget.email!,
-                              context: context,
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'A New Mail has Been Sent Successfully!',
-                                  style: GoogleFonts.outfit(
-                                    color: FlutterFlowTheme.of(context).info,
+                                .override(
+                                  font: GoogleFonts.outfit(
                                     fontWeight: FontWeight.w500,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
                                   ),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
                                 ),
-                                duration: Duration(milliseconds: 4000),
-                                backgroundColor: Color(0xFF08E957),
-                              ),
-                            );
-
-                            context.goNamed(LoginWidget.routeName);
-                          },
-                      )
-                    ],
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.outfit(
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
                           ),
-                          letterSpacing: 0.0,
-                          fontWeight: FontWeight.w500,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                        ),
+                          TextSpan(
+                            text:
+                                'It might be hiding in Promotions or Spam,\nso don’t forget to check there. \n',
+                            style: TextStyle(),
+                          ),
+                          TextSpan(
+                            text: 'Still missing? No worries \n Just hit ',
+                            style: TextStyle(),
+                          ),
+                          TextSpan(
+                            text: '‘Resend’ ',
+                            style: GoogleFonts.outfit(
+                              color: FlutterFlowTheme.of(context).tertiary,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'and we’ve got you covered.',
+                            style: TextStyle(),
+                          )
+                        ],
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.outfit(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                    child: RichText(
+                      textScaler: MediaQuery.of(context).textScaler,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Didn’t show up? ',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.outfit(
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                ),
+                          ),
+                          TextSpan(
+                            text: 'Resend Mail',
+                            style: GoogleFonts.outfit(
+                              color: FlutterFlowTheme.of(context).primary,
+                              fontWeight: FontWeight.w800,
+                            ),
+                            mouseCursor: SystemMouseCursors.click,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                if (widget.email!.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Email required!',
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                await authManager.resetPassword(
+                                  email: widget.email!,
+                                  context: context,
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'A New Mail has Been Sent Successfully!',
+                                      style: GoogleFonts.outfit(
+                                        color:
+                                            FlutterFlowTheme.of(context).info,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 4000),
+                                    backgroundColor: Color(0xFF08E957),
+                                  ),
+                                );
+
+                                context.goNamed(LoginWidget.routeName);
+                              },
+                          )
+                        ],
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.outfit(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

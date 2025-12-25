@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 0.0.1+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -37,6 +37,7 @@ dependencies:
   cloud_firestore_platform_interface: 6.6.9
   cloud_firestore_web: 4.4.9
   collection: 1.19.1
+  csv: 6.0.0
   dropdown_button2: 2.3.9
   easy_debounce: 2.0.1
   expandable: 5.0.1
@@ -51,7 +52,12 @@ dependencies:
   firebase_performance_web: 0.1.7+13
   flutter_animate: 4.5.0
   flutter_cache_manager: 3.4.1
-  flutter_svg: 2.1.0
+  flutter_secure_storage: 10.0.0-beta.4
+  flutter_secure_storage_linux: 2.0.1
+  flutter_secure_storage_macos: 4.0.0
+  flutter_secure_storage_platform_interface: 2.0.1
+  flutter_secure_storage_web: 2.0.0
+  flutter_secure_storage_windows: 4.0.0
   font_awesome_flutter: 10.7.0
   from_css_color: 2.0.0
   functions_client: 2.4.2
@@ -92,6 +98,7 @@ dependencies:
   sign_in_with_apple_platform_interface: 2.0.0
   sign_in_with_apple_web: 3.0.0
   simple_gradient_text: 1.2.3
+  smooth_page_indicator: 1.1.0
   sqflite: 2.3.3+1
   sqflite_common: 2.5.4+3
   storage_client: 2.4.0
@@ -99,6 +106,7 @@ dependencies:
   styled_divider: 1.0.4
   supabase: 2.7.0
   supabase_flutter: 2.9.0
+  synchronized: 3.4.0
   timeago: 3.7.1
   url_launcher: 6.3.1
   url_launcher_android: 6.3.16
