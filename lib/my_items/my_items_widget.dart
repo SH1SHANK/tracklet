@@ -1,3 +1,7 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/supabase/supabase.dart';
+import '/components/user_found_item_widget.dart';
+import '/components/user_lost_item_widget.dart';
 import '/flutter_flow/flutter_flow_button_tabbar.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -161,10 +165,140 @@ class _MyItemsWidgetState extends State<MyItemsWidget>
                         controller: _model.tabBarController,
                         children: [
                           KeepAliveWidgetWrapper(
-                            builder: (context) => Container(),
+                            builder: (context) => Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 12.0, 0.0, 0.0),
+                                  child: FutureBuilder<List<ItemsRow>>(
+                                    future: ItemsTable().queryRows(
+                                      queryFn: (q) => q
+                                          .eqOrNull(
+                                            'user_id',
+                                            currentUserUid,
+                                          )
+                                          .eqOrNull(
+                                            'intent',
+                                            'lost',
+                                          )
+                                          .order('updated_at'),
+                                    ),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      List<ItemsRow> listViewItemsRowList =
+                                          snapshot.data!;
+
+                                      return ListView.separated(
+                                        padding: EdgeInsets.zero,
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: listViewItemsRowList.length,
+                                        separatorBuilder: (_, __) =>
+                                            SizedBox(height: 6.0),
+                                        itemBuilder: (context, listViewIndex) {
+                                          final listViewItemsRow =
+                                              listViewItemsRowList[
+                                                  listViewIndex];
+                                          return Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    6.0, 0.0, 6.0, 0.0),
+                                            child: UserLostItemWidget(
+                                              key: Key(
+                                                  'Keyhy6_${listViewIndex}_of_${listViewItemsRowList.length}'),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           KeepAliveWidgetWrapper(
-                            builder: (context) => Container(),
+                            builder: (context) => Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 12.0, 0.0, 0.0),
+                                  child: FutureBuilder<List<ItemsRow>>(
+                                    future: ItemsTable().queryRows(
+                                      queryFn: (q) => q
+                                          .eqOrNull(
+                                            'user_id',
+                                            currentUserUid,
+                                          )
+                                          .eqOrNull(
+                                            'intent',
+                                            'found',
+                                          )
+                                          .order('updated_at'),
+                                    ),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      List<ItemsRow> listViewItemsRowList =
+                                          snapshot.data!;
+
+                                      return ListView.separated(
+                                        padding: EdgeInsets.zero,
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: listViewItemsRowList.length,
+                                        separatorBuilder: (_, __) =>
+                                            SizedBox(height: 6.0),
+                                        itemBuilder: (context, listViewIndex) {
+                                          final listViewItemsRow =
+                                              listViewItemsRowList[
+                                                  listViewIndex];
+                                          return Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    6.0, 0.0, 6.0, 0.0),
+                                            child: UserFoundItemWidget(
+                                              key: Key(
+                                                  'Keyuic_${listViewIndex}_of_${listViewItemsRowList.length}'),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

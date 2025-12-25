@@ -2,6 +2,7 @@
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/backend/supabase/supabase.dart';
+import '/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -9,13 +10,16 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
+import '/custom_code/actions/index.dart';
+import '/flutter_flow/custom_functions.dart';
+
 import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 
-// Enhanced time-based greeting system with 4-hour intervals
+/// Enhanced time-based greeting system with 4-hour intervals
 class _PersonalizedGreetings {
-  // Time periods divided into 4-hour segments for more precise personalization
+  // Time periods divided into 4-hour segments for precise personalization
   static const _timePeriods = {
     'early_morning': [4, 5, 6, 7], // 4 AM - 7:59 AM
     'morning': [8, 9, 10, 11], // 8 AM - 11:59 AM
@@ -25,8 +29,8 @@ class _PersonalizedGreetings {
     'night': [0, 1, 2, 3], // 12 AM - 3:59 AM
   };
 
-  // Authentic, conversational primary greetings[1][2]
-  static const _primaryGreetings = {
+  // Authentic, conversational greetings
+  static const _greetings = {
     'early_morning_sunny': [
       'Rise and shine, {name}! ☀️',
       'Good morning, {name}! What a beautiful start! 🌅',
@@ -44,6 +48,12 @@ class _PersonalizedGreetings {
       'Morning {name}! Cozy rainy day energy! ☔',
       'Hey {name}! Perfect morning for indoor victories! 🌦️',
       'Morning, {name}! Rain brings renewal! 🌧️'
+    ],
+    'early_morning_stormy': [
+      'Good morning, {name}! Powerful weather for powerful goals! ⛈️',
+      'Morning {name}! Storm energy fuels your determination! ⚡',
+      'Hey {name}! Even storms bow to your resilience! 🌩️',
+      'Morning, {name}! Thunder announces your arrival! ⛈️'
     ],
     'early_morning_default': [
       'Good morning, {name}! Ready to seize the day! 🌟',
@@ -69,6 +79,12 @@ class _PersonalizedGreetings {
       'Hey {name}! Fresh rain, fresh possibilities! 🌦️',
       'Morning, {name}! Let the rain wash yesterday away! 🌧️'
     ],
+    'morning_stormy': [
+      'Good morning, {name}! Storm clouds can\'t dim your light! ⛈️',
+      'Morning {name}! Channel this storm energy into success! ⚡',
+      'Hey {name}! You\'re the calm in any storm! 🌩️',
+      'Morning, {name}! Thunder is just nature cheering you on! ⛈️'
+    ],
     'morning_default': [
       'Good morning, {name}! Ready to make today count! 🌟',
       'Morning {name}! Your potential is unlimited today! ✨',
@@ -92,6 +108,12 @@ class _PersonalizedGreetings {
       'Afternoon {name}! Perfect weather for indoor focus! ☔',
       'Hey {name}! Let this rain refresh your spirit! 🌦️',
       'Afternoon, {name}! Rainy days make victories sweeter! 🌧️'
+    ],
+    'midday_stormy': [
+      'Good afternoon, {name}! Stormy weather, unstoppable you! ⛈️',
+      'Afternoon {name}! Your energy surpasses any storm! ⚡',
+      'Hey {name}! Thunder can\'t compete with your power! 🌩️',
+      'Afternoon, {name}! Storms come and go, you remain! ⛈️'
     ],
     'midday_default': [
       'Good afternoon, {name}! Hope your day is treating you well! 🌟',
@@ -117,6 +139,12 @@ class _PersonalizedGreetings {
       'Hey {name}! This rain is nature\'s way of refreshing you! 🌦️',
       'Afternoon, {name}! Let the rain inspire your creativity! 🌧️'
     ],
+    'afternoon_stormy': [
+      'Good afternoon, {name}! Storm\'s fury can\'t match yours! ⛈️',
+      'Afternoon {name}! Electrifying weather, electrifying you! ⚡',
+      'Hey {name}! You\'re the eye of this storm! 🌩️',
+      'Afternoon, {name}! Lightning strikes, but you strike back! ⛈️'
+    ],
     'afternoon_default': [
       'Good afternoon, {name}! Time to make the rest of your day amazing! 🌟',
       'Afternoon {name}! You\'re doing great, keep going! ✨',
@@ -141,6 +169,12 @@ class _PersonalizedGreetings {
       'Hey {name}! Let this rain wash away the day\'s stress! 🌦️',
       'Evening, {name}! Perfect weather for reflection and rest! 🌧️'
     ],
+    'evening_stormy': [
+      'Good evening, {name}! Storm outside, peace inside! ⛈️',
+      'Evening {name}! Thunder outside, tranquility within! ⚡',
+      'Hey {name}! The storm makes your calm even more powerful! 🌩️',
+      'Evening, {name}! Let the storm rage, you\'ve earned your rest! ⛈️'
+    ],
     'evening_default': [
       'Good evening, {name}! Time to celebrate today\'s victories! 🌟',
       'Evening {name}! You\'ve earned this moment of peace! ✨',
@@ -157,46 +191,6 @@ class _PersonalizedGreetings {
     ]
   };
 
-  // More natural, conversational secondary messages[1][5]
-  static const _secondaryMessages = {
-    'early_morning': [
-      'You\'re up early - that\'s the spirit of a champion! 🏆',
-      'Early mornings are when magic happens, and you\'re here for it! ✨',
-      'Starting strong today, I can feel your determination! 💪',
-      'The world is quiet, but your potential is loud and clear! 🚀'
-    ],
-    'morning': [
-      'Your morning energy is contagious - keep spreading those good vibes! 😊',
-      'Something tells me today is going to be absolutely incredible for you! 🌟',
-      'You\'ve got that morning glow that says "I\'m ready for anything!" ✨',
-      'The way you tackle mornings shows you\'re built for greatness! 💫'
-    ],
-    'midday': [
-      'Midday check-in: you\'re doing amazing, keep that momentum going! 🔥',
-      'The sun is at its peak, and so are you - what perfect timing! ☀️',
-      'Halfway through the day and you\'re already winning! 🏆',
-      'Your afternoon energy is exactly what the world needs right now! ✨'
-    ],
-    'afternoon': [
-      'Afternoons are for reflection and action - you\'re mastering both! 🎯',
-      'The golden hour is here, and you\'re absolutely glowing! ✨',
-      'Your afternoon presence brings such positive energy to everything! 🌟',
-      'This is your time to shine, and shine you absolutely do! 💫'
-    ],
-    'evening': [
-      'Evenings are for gratitude, and I\'m grateful you\'re here! 🙏',
-      'Time to unwind, but your impact on today will last forever! 🌅',
-      'You\'ve made today better just by being you - that\'s powerful! ✨',
-      'As the day winds down, your light continues to shine bright! 🌟'
-    ],
-    'night': [
-      'Rest well - tomorrow is lucky to have you coming its way! 🌙',
-      'Sweet dreams are made of days like the one you just lived! 💭',
-      'Your day is done, but your story is just getting started! 📖',
-      'Sleep tight knowing you made today count in every way! ✨'
-    ]
-  };
-
   static String _getTimePeriod(int hour) {
     for (final entry in _timePeriods.entries) {
       if (entry.value.contains(hour)) {
@@ -206,56 +200,57 @@ class _PersonalizedGreetings {
     return 'morning'; // fallback
   }
 
-  static String getPrimary(String condition, int hour, String name) {
+  static String getGreeting(String condition, int hour, String name) {
     final random = Random();
     final timePeriod = _getTimePeriod(hour);
 
     // Special handling for night period (no weather differentiation)
     if (timePeriod == 'night') {
-      final templates = _primaryGreetings['night_any']!;
+      final templates = _greetings['night_any']!;
       return templates[random.nextInt(templates.length)]
           .replaceAll('{name}', name);
     }
 
+    // Build key with weather condition
     final key = '${timePeriod}_${condition}';
-    final templates =
-        _primaryGreetings[key] ?? _primaryGreetings['${timePeriod}_default']!;
+    final templates = _greetings[key] ?? _greetings['${timePeriod}_default']!;
+
     return templates[random.nextInt(templates.length)]
         .replaceAll('{name}', name);
   }
-
-  static String getSecondary(int hour) {
-    final random = Random();
-    final timePeriod = _getTimePeriod(hour);
-    final templates = _secondaryMessages[timePeriod]!;
-    return templates[random.nextInt(templates.length)];
-  }
 }
 
-// Weather condition mapping (same as before)
+/// Weather condition mapping with comprehensive coverage
 class _WeatherConditions {
   static const _conditions = {
-    0: 'sunny',
-    1: 'cloudy',
-    2: 'cloudy',
-    3: 'cloudy',
-    45: 'cloudy',
-    48: 'cloudy',
-    51: 'rainy',
-    53: 'rainy',
-    55: 'rainy',
-    61: 'rainy',
-    63: 'rainy',
-    65: 'rainy',
-    71: 'rainy',
-    73: 'rainy',
-    75: 'rainy',
-    80: 'rainy',
-    81: 'rainy',
-    82: 'rainy',
-    95: 'stormy',
-    96: 'stormy',
-    99: 'stormy'
+    0: 'sunny', // Clear sky
+    1: 'cloudy', // Mainly clear
+    2: 'cloudy', // Partly cloudy
+    3: 'cloudy', // Overcast
+    45: 'cloudy', // Fog
+    48: 'cloudy', // Depositing rime fog
+    51: 'rainy', // Light drizzle
+    53: 'rainy', // Moderate drizzle
+    55: 'rainy', // Dense drizzle
+    56: 'rainy', // Light freezing drizzle
+    57: 'rainy', // Dense freezing drizzle
+    61: 'rainy', // Slight rain
+    63: 'rainy', // Moderate rain
+    65: 'rainy', // Heavy rain
+    66: 'rainy', // Light freezing rain
+    67: 'rainy', // Heavy freezing rain
+    71: 'rainy', // Slight snow fall
+    73: 'rainy', // Moderate snow fall
+    75: 'rainy', // Heavy snow fall
+    77: 'rainy', // Snow grains
+    80: 'rainy', // Slight rain showers
+    81: 'rainy', // Moderate rain showers
+    82: 'rainy', // Violent rain showers
+    85: 'rainy', // Slight snow showers
+    86: 'rainy', // Heavy snow showers
+    95: 'stormy', // Thunderstorm
+    96: 'stormy', // Thunderstorm with slight hail
+    99: 'stormy' // Thunderstorm with heavy hail
   };
 
   static String getCondition(int code) => _conditions[code] ?? 'default';
@@ -264,15 +259,16 @@ class _WeatherConditions {
 // Singleton HTTP client for connection reuse
 final _httpClient = http.Client();
 
-// Weather API URL for Karimnagar, Telangana, India
 const _weatherApiUrl =
-    'https://api.open-meteo.com/v1/forecast?latitude=18.4386&longitude=79.1288&current_weather=true';
+    'https://api.open-meteo.com/v1/forecast?latitude=11.2588&longitude=75.7804&current_weather=true';
 
-Future<UserGreetingMessageStruct> generateGreetingMessage(
+/// Main function to generate personalized greeting message
+/// Returns: String
+Future<String> generateGreetingMessage(
   String userName,
   bool includeWeather,
 ) async {
-  // Input validation with fast fallback
+  // Input validation
   final name = userName.trim();
   if (name.isEmpty) {
     return _createFallbackGreeting('there');
@@ -281,58 +277,49 @@ Future<UserGreetingMessageStruct> generateGreetingMessage(
   try {
     String weatherCondition = 'default';
 
-    // Fetch weather data with aggressive timeout if requested
     if (includeWeather) {
       weatherCondition = await _fetchWeatherCondition().timeout(
-          const Duration(milliseconds: 1000),
-          onTimeout: () => 'default');
+        const Duration(milliseconds: 2000),
+        onTimeout: () => 'default',
+      );
     }
 
-    // Generate messages using enhanced time-based templates
     final hour = DateTime.now().hour;
-    final primaryMessage =
-        _PersonalizedGreetings.getPrimary(weatherCondition, hour, name);
-    final secondaryMessage = _PersonalizedGreetings.getSecondary(hour);
 
-    return UserGreetingMessageStruct(
-      primaryMessage: primaryMessage,
-      secondaryMessage: secondaryMessage,
-    );
+    // Return the String directly
+    return _PersonalizedGreetings.getGreeting(weatherCondition, hour, name);
   } catch (e) {
-    // Fast fallback on any error
+    debugPrint('❌ Error: $e');
     return _createFallbackGreeting(name);
   }
 }
 
-/// Fetches weather condition from API (optimized for speed)
+/// Fetches current weather condition from Open-Meteo API
 Future<String> _fetchWeatherCondition() async {
   try {
     final response = await _httpClient
         .get(Uri.parse(_weatherApiUrl))
-        .timeout(const Duration(milliseconds: 1000));
+        .timeout(const Duration(milliseconds: 2000));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final weatherCode = data['current_weather']?['weathercode'] as int?;
-
       if (weatherCode != null) {
         return _WeatherConditions.getCondition(weatherCode);
       }
     }
   } catch (e) {
-    // Silently handle errors and return default
+    debugPrint('⚠️ Weather fetch error: $e');
   }
-
   return 'default';
 }
 
-/// Creates fallback greeting when all else fails
-UserGreetingMessageStruct _createFallbackGreeting(String name) {
+/// Creates a fallback greeting as a String
+String _createFallbackGreeting(String name) {
   final random = Random();
   final hour = DateTime.now().hour;
 
-  // Time-aware fallback greetings
-  final fallbackPrimary = {
+  final fallbackGreetings = {
     'early_morning': ['Good morning, $name! 🌅', 'Rise and shine, $name! ☀️'],
     'morning': ['Good morning, $name! ✨', 'Morning sunshine, $name! 🌞'],
     'midday': [
@@ -344,22 +331,11 @@ UserGreetingMessageStruct _createFallbackGreeting(String name) {
     'night': ['Good night, $name! 🌙', 'Night, $name! Sweet dreams! ✨']
   };
 
-  final fallbackSecondary = [
-    'Ready to make today absolutely amazing! 🚀',
-    'Your potential is unlimited - unlock it today! ⚡',
-    'Amazing opportunities are waiting for you! ✨',
-    'You\'re going to do incredible things today! 🌟'
-  ];
-
   final timePeriod = _PersonalizedGreetings._getTimePeriod(hour);
-  final primaryOptions =
-      fallbackPrimary[timePeriod] ?? fallbackPrimary['morning']!;
+  final greetingOptions =
+      fallbackGreetings[timePeriod] ?? fallbackGreetings['morning']!;
 
-  return UserGreetingMessageStruct(
-    primaryMessage: primaryOptions[random.nextInt(primaryOptions.length)],
-    secondaryMessage:
-        fallbackSecondary[random.nextInt(fallbackSecondary.length)],
-  );
+  return greetingOptions[random.nextInt(greetingOptions.length)];
 }
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the green button on the right!

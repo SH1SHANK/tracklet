@@ -17,3 +17,4 @@ export '/my_items/my_items_widget.dart' show MyItemsWidget;
 export '/my_claims/my_claims_widget.dart' show MyClaimsWidget;
 export '/user_notifications/user_notifications_widget.dart'
     show UserNotificationsWidget;
+export '/manage_claims/manage_claims_widget.dart' show ManageClaimsWidget;

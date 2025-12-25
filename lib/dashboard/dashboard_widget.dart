@@ -1,6 +1,7 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/schema/structs/index.dart';
 import '/backend/supabase/supabase.dart';
+import '/components/filter_dropdown_widget.dart';
 import '/components/lost_item_card_widget.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -13,6 +14,7 @@ import '/index.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
 import 'package:styled_divider/styled_divider.dart';
+import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,26 +47,25 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       if (RootPageContext.isInactiveRootPage(context)) {
         return;
       }
-      if (!(FFAppState().primaryGreetingMessage != '')) {
+      if (!(FFAppState().userGreetingMessage != '')) {
         _model.generatedGreetingMessage = await actions.generateGreetingMessage(
           currentUserDisplayName,
           true,
         );
         _model.fetchedCategories = await actions.getCategories();
-        _model.initialFeedRows = await actions.getSortedFeed(
-          _model.sortBy,
-        );
-        FFAppState().primaryGreetingMessage =
-            _model.generatedGreetingMessage!.primaryMessage;
-        FFAppState().secondaryGreetingMessage =
-            _model.generatedGreetingMessage!.secondaryMessage;
+        FFAppState().userGreetingMessage = FFAppState().userGreetingMessage;
         FFAppState().categories =
             _model.fetchedCategories!.toList().cast<CategoriesStruct>();
         safeSetState(() {});
-        _model.feedItems =
-            _model.initialFeedRows!.toList().cast<FeedItemsRow>();
-        safeSetState(() {});
       }
+      _model.initialFeedRows = await actions.renderFeed(
+        '',
+        _model.sortBy,
+        _model.activeFilter,
+        _model.categoryId,
+      );
+      _model.feedItems = _model.initialFeedRows!.toList().cast<FeedItemsRow>();
+      safeSetState(() {});
     });
 
     _model.textController ??= TextEditingController();
@@ -638,27 +639,48 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    FFAppState().primaryGreetingMessage,
-                                    style: FlutterFlowTheme.of(context)
-                                        .displaySmall
-                                        .override(
-                                          font: GoogleFonts.outfit(
-                                            fontWeight: FontWeight.normal,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .displaySmall
-                                                    .fontStyle,
-                                          ),
-                                          fontSize: 16.0,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.normal,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .displaySmall
-                                                  .fontStyle,
+                                  Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.8,
+                                        decoration: BoxDecoration(),
+                                        child: Text(
+                                          FFAppState().userGreetingMessage,
+                                          style: FlutterFlowTheme.of(context)
+                                              .displaySmall
+                                              .override(
+                                                font: GoogleFonts.outfit(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .displaySmall
+                                                          .fontStyle,
+                                                ),
+                                                fontSize: 16.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .displaySmall
+                                                        .fontStyle,
+                                              ),
                                         ),
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.75,
+                                        decoration: BoxDecoration(),
+                                      ),
+                                    ],
                                   ),
                                   Container(
                                     width: 44.0,
@@ -702,49 +724,6 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 0.0, 16.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        2.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      FFAppState().secondaryGreetingMessage,
-                                      style: FlutterFlowTheme.of(context)
-                                          .displaySmall
-                                          .override(
-                                            font: GoogleFonts.outfit(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .displaySmall
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .displaySmall
-                                                      .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            fontSize: 18.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .displaySmall
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .displaySmall
-                                                    .fontStyle,
-                                          ),
                                     ),
                                   ),
                                 ],
@@ -1208,77 +1187,114 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                child: TextFormField(
-                                  controller: _model.textController,
-                                  focusNode: _model.textFieldFocusNode,
-                                  autofocus: false,
-                                  textInputAction: TextInputAction.search,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    hintText: 'Search Items...',
-                                    hintStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.outfit(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 6.0, 0.0),
+                                  child: TextFormField(
+                                    controller: _model.textController,
+                                    focusNode: _model.textFieldFocusNode,
+                                    onFieldSubmitted: (_) async {
+                                      _model.searchQuery =
+                                          _model.textController.text;
+                                      _model.isSearchActive = true;
+                                      safeSetState(() {});
+                                      _model.renderedFeedItemsViaSearch =
+                                          await actions.renderFeed(
+                                        _model.searchQuery,
+                                        _model.sortBy,
+                                        _model.activeFilter,
+                                        _model.categoryId,
+                                      );
+                                      _model.feedItems = _model
+                                          .renderedFeedItemsViaSearch!
+                                          .toList()
+                                          .cast<FeedItemsRow>();
+                                      safeSetState(() {});
+
+                                      safeSetState(() {});
+                                    },
+                                    autofocus: false,
+                                    textInputAction: TextInputAction.search,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      hintText: 'Search Items...',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            font: GoogleFonts.outfit(
+                                              fontWeight: FontWeight.w500,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                            fontSize: 15.0,
+                                            letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
                                             fontStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMedium
                                                     .fontStyle,
                                           ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
                                           color: FlutterFlowTheme.of(context)
-                                              .secondaryText,
-                                          fontSize: 15.0,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
+                                              .alternate,
+                                          width: 1.0,
                                         ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .alternate,
-                                        width: 1.0,
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                       ),
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                       ),
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                       ),
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                       ),
-                                      borderRadius: BorderRadius.circular(12.0),
+                                      filled: true,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                      contentPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              12.0, 16.0, 12.0, 16.0),
+                                      suffixIcon: Icon(
+                                        FFIcons.ksearch,
+                                      ),
                                     ),
-                                    filled: true,
-                                    fillColor: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    contentPadding:
-                                        EdgeInsetsDirectional.fromSTEB(
-                                            12.0, 16.0, 12.0, 16.0),
-                                    suffixIcon: Icon(
-                                      FFIcons.ksearch,
-                                    ),
-                                  ),
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        font: GoogleFonts.outfit(
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.outfit(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
                                           fontWeight:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium
@@ -1288,38 +1304,126 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                                   .bodyMedium
                                                   .fontStyle,
                                         ),
-                                        letterSpacing: 0.0,
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                  minLines: 1,
-                                  validator: _model.textControllerValidator
-                                      .asValidator(context),
+                                    minLines: 1,
+                                    validator: _model.textControllerValidator
+                                        .asValidator(context),
+                                  ),
                                 ),
                               ),
-                              FlutterFlowIconButton(
-                                borderColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                                borderRadius: 8.0,
-                                borderWidth: 1.0,
-                                buttonSize: 48.0,
-                                fillColor: FlutterFlowTheme.of(context)
-                                    .primaryBackground,
-                                icon: Icon(
-                                  FFIcons.kfilter06,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  size: 24.0,
+                              if (_model.isSearchActive)
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: FlutterFlowIconButton(
+                                    borderRadius: 8.0,
+                                    buttonSize: 48.0,
+                                    icon: Icon(
+                                      FFIcons.kxBold,
+                                      color: FlutterFlowTheme.of(context).error,
+                                      size: 32.0,
+                                    ),
+                                    onPressed: () async {
+                                      _model.searchQuery = null;
+                                      _model.isSearchActive = false;
+                                      safeSetState(() {});
+                                      safeSetState(() {
+                                        _model.textController?.clear();
+                                      });
+                                    },
+                                  ),
                                 ),
-                                onPressed: () {
-                                  print('IconButton pressed ...');
-                                },
+                              Builder(
+                                builder: (context) => Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      6.0, 0.0, 0.0, 0.0),
+                                  child: FlutterFlowIconButton(
+                                    borderColor:
+                                        FlutterFlowTheme.of(context).alternate,
+                                    borderRadius: 8.0,
+                                    borderWidth: 1.0,
+                                    buttonSize: 48.0,
+                                    fillColor: FlutterFlowTheme.of(context)
+                                        .primaryBackground,
+                                    icon: Icon(
+                                      FFIcons.kfilter06,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 24.0,
+                                    ),
+                                    onPressed: () async {
+                                      await showAlignedDialog(
+                                        context: context,
+                                        isGlobal: false,
+                                        avoidOverflow: true,
+                                        targetAnchor:
+                                            AlignmentDirectional(-1.0, 1.0)
+                                                .resolve(
+                                                    Directionality.of(context)),
+                                        followerAnchor:
+                                            AlignmentDirectional(0.0, 0.0)
+                                                .resolve(
+                                                    Directionality.of(context)),
+                                        builder: (dialogContext) {
+                                          return Material(
+                                            color: Colors.transparent,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                FocusScope.of(dialogContext)
+                                                    .unfocus();
+                                                FocusManager
+                                                    .instance.primaryFocus
+                                                    ?.unfocus();
+                                              },
+                                              child: FilterDropdownWidget(
+                                                activeFilter:
+                                                    _model.activeFilter,
+                                                filterCallBack:
+                                                    (filterBy) async {
+                                                  _model.activeFilter =
+                                                      filterBy;
+                                                  safeSetState(() {});
+                                                  _model.renderedFeedItemsViaFilter =
+                                                      await actions.renderFeed(
+                                                    _model.searchQuery,
+                                                    _model.sortBy,
+                                                    _model.activeFilter,
+                                                    _model.categoryId,
+                                                  );
+                                                  _model.feedItems = _model
+                                                      .renderedFeedItemsViaFilter!
+                                                      .toList()
+                                                      .cast<FeedItemsRow>();
+                                                  safeSetState(() {});
+                                                  Navigator.pop(context);
+                                                },
+                                                clearFilterCallback: () async {
+                                                  _model.activeFilter = 'none';
+                                                  safeSetState(() {});
+                                                  _model.renderedFeedItemsViaClearFilter =
+                                                      await actions.renderFeed(
+                                                    _model.searchQuery,
+                                                    _model.sortBy,
+                                                    _model.activeFilter,
+                                                    _model.categoryId,
+                                                  );
+                                                  _model.feedItems = _model
+                                                      .renderedFeedItemsViaClearFilter!
+                                                      .toList()
+                                                      .cast<FeedItemsRow>();
+                                                  safeSetState(() {});
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+
+                                      safeSetState(() {});
+                                    },
+                                  ),
+                                ),
                               ),
-                            ].divide(SizedBox(width: 12.0)),
+                            ],
                           ),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -1334,11 +1438,40 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                         .categories
                                         .map((e) => e.categoryName)
                                         .toList()
+                                        .sortedList(
+                                            keyOf: (e) => e, desc: false)
                                         .map((label) => ChipData(label))
                                         .toList(),
-                                    onChanged: (val) => safeSetState(() =>
-                                        _model.choiceChipsValue =
-                                            val?.firstOrNull),
+                                    onChanged: (val) async {
+                                      safeSetState(() => _model
+                                          .choiceChipsValue = val?.firstOrNull);
+                                      _model.categoryId = valueOrDefault<int>(
+                                        FFAppState()
+                                            .categories
+                                            .where((e) =>
+                                                e.categoryName ==
+                                                _model.choiceChipsValue)
+                                            .toList()
+                                            .firstOrNull
+                                            ?.categoryId,
+                                        0,
+                                      );
+                                      safeSetState(() {});
+                                      _model.renderedFeedItems =
+                                          await actions.renderFeed(
+                                        _model.searchQuery,
+                                        _model.sortBy,
+                                        _model.activeFilter,
+                                        _model.categoryId,
+                                      );
+                                      _model.feedItems = _model
+                                          .renderedFeedItems!
+                                          .toList()
+                                          .cast<FeedItemsRow>();
+                                      safeSetState(() {});
+
+                                      safeSetState(() {});
+                                    },
                                     selectedChipStyle: ChipStyle(
                                       backgroundColor:
                                           FlutterFlowTheme.of(context).primary,
@@ -1412,7 +1545,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                     controller:
                                         _model.choiceChipsValueController ??=
                                             FormFieldController<List<String>>(
-                                      ['all'],
+                                      ['All'],
                                     ),
                                     wrapped: false,
                                   ),
@@ -1422,23 +1555,36 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                           ),
                           FlutterFlowDropDown<String>(
                             controller: _model.dropDownValueController ??=
-                                FormFieldController<String>(null),
-                            options: [
+                                FormFieldController<String>(
+                              _model.dropDownValue ??= 'Newest First',
+                            ),
+                            options: List<String>.from([
                               'Newest First',
                               'Oldest First',
                               'Recently Updated',
                               'Most Viewed',
                               'Least Viewed'
+                            ]),
+                            optionLabels: [
+                              'Sort By: Newest First',
+                              'Sort By: Oldest First',
+                              'Sort By: Recently Updated',
+                              'Sort By: Most Viewed',
+                              'Sort By: Least Viewed'
                             ],
                             onChanged: (val) async {
                               safeSetState(() => _model.dropDownValue = val);
                               _model.sortBy = _model.dropDownValue!;
                               safeSetState(() {});
-                              _model.sortedFeedRows =
-                                  await actions.getSortedFeed(
+                              _model.renderedFeedItemsViaSort =
+                                  await actions.renderFeed(
+                                _model.searchQuery,
                                 _model.sortBy,
+                                _model.activeFilter,
+                                _model.categoryId,
                               );
-                              _model.feedItems = _model.sortedFeedRows!
+                              _model.feedItems = _model
+                                  .renderedFeedItemsViaSort!
                                   .toList()
                                   .cast<FeedItemsRow>();
                               safeSetState(() {});
@@ -1481,7 +1627,6 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                             margin: EdgeInsetsDirectional.fromSTEB(
                                 4.0, 0.0, 4.0, 0.0),
                             hidesUnderline: true,
-                            disabled: _model.filterBy,
                             isOverButton: false,
                             isSearchable: false,
                             isMultiSelect: false,
@@ -1491,119 +1636,49 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                     ),
                     Builder(
                       builder: (context) {
-                        if (!_model.filterBy) {
-                          return Builder(
-                            builder: (context) {
-                              final generalFeedItems =
-                                  _model.feedItems.toList();
+                        final generalFeedItems = _model.feedItems.toList();
 
-                              return ListView.separated(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: generalFeedItems.length,
-                                separatorBuilder: (_, __) =>
-                                    SizedBox(height: 4.0),
-                                itemBuilder: (context, generalFeedItemsIndex) {
-                                  final generalFeedItemsItem =
-                                      generalFeedItems[generalFeedItemsIndex];
-                                  return Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        4.0, 0.0, 4.0, 0.0),
-                                    child: wrapWithModel(
-                                      model:
-                                          _model.lostItemCardModels1.getModel(
-                                        generalFeedItemsItem.id!,
-                                        generalFeedItemsIndex,
-                                      ),
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: LostItemCardWidget(
-                                        key: Key(
-                                          'Key8l3_${generalFeedItemsItem.id!}',
-                                        ),
-                                        itemID: generalFeedItemsItem.id!,
-                                        intent: generalFeedItemsItem.intent!,
-                                        catagoryID: generalFeedItemsItem
-                                            .categoryId!
-                                            .toString(),
-                                        itemName: generalFeedItemsItem.title!,
-                                        itemDescription:
-                                            generalFeedItemsItem.description!,
-                                        viewsCount:
-                                            generalFeedItemsItem.viewsCount!,
-                                        itemLocation:
-                                            GooglePlaceStruct.maybeFromMap(
-                                                    generalFeedItemsItem
-                                                        .location!)!
-                                                .name,
-                                        eventDate:
-                                            generalFeedItemsItem.eventDate!,
-                                        lastUpdatedAt:
-                                            generalFeedItemsItem.updatedAt!,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        } else {
-                          return Builder(
-                            builder: (context) {
-                              final generalFeedItems =
-                                  _model.feedItems.toList();
-
-                              return ListView.separated(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: generalFeedItems.length,
-                                separatorBuilder: (_, __) =>
-                                    SizedBox(height: 4.0),
-                                itemBuilder: (context, generalFeedItemsIndex) {
-                                  final generalFeedItemsItem =
-                                      generalFeedItems[generalFeedItemsIndex];
-                                  return Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        4.0, 0.0, 4.0, 0.0),
-                                    child: wrapWithModel(
-                                      model:
-                                          _model.lostItemCardModels2.getModel(
-                                        generalFeedItemsItem.id!,
-                                        generalFeedItemsIndex,
-                                      ),
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: LostItemCardWidget(
-                                        key: Key(
-                                          'Keyj9x_${generalFeedItemsItem.id!}',
-                                        ),
-                                        itemID: generalFeedItemsItem.id!,
-                                        intent: generalFeedItemsItem.intent!,
-                                        catagoryID: generalFeedItemsItem
-                                            .categoryId!
-                                            .toString(),
-                                        itemName: generalFeedItemsItem.title!,
-                                        itemDescription:
-                                            generalFeedItemsItem.description!,
-                                        viewsCount:
-                                            generalFeedItemsItem.viewsCount!,
-                                        itemLocation:
-                                            GooglePlaceStruct.maybeFromMap(
-                                                    generalFeedItemsItem
-                                                        .location!)!
-                                                .name,
-                                        eventDate:
-                                            generalFeedItemsItem.eventDate!,
-                                        lastUpdatedAt:
-                                            generalFeedItemsItem.updatedAt!,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        }
+                        return ListView.separated(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: generalFeedItems.length,
+                          separatorBuilder: (_, __) => SizedBox(height: 4.0),
+                          itemBuilder: (context, generalFeedItemsIndex) {
+                            final generalFeedItemsItem =
+                                generalFeedItems[generalFeedItemsIndex];
+                            return Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  4.0, 0.0, 4.0, 0.0),
+                              child: wrapWithModel(
+                                model: _model.lostItemCardModels.getModel(
+                                  generalFeedItemsItem.id!,
+                                  generalFeedItemsIndex,
+                                ),
+                                updateCallback: () => safeSetState(() {}),
+                                child: LostItemCardWidget(
+                                  key: Key(
+                                    'Key9yh_${generalFeedItemsItem.id!}',
+                                  ),
+                                  itemID: generalFeedItemsItem.id!,
+                                  intent: generalFeedItemsItem.intent!,
+                                  catagoryID: generalFeedItemsItem.categoryId!
+                                      .toString(),
+                                  itemName: generalFeedItemsItem.title!,
+                                  itemDescription:
+                                      generalFeedItemsItem.description!,
+                                  viewsCount: generalFeedItemsItem.viewsCount!,
+                                  itemLocation: GooglePlaceStruct.maybeFromMap(
+                                          generalFeedItemsItem.location!)!
+                                      .name,
+                                  eventDate: generalFeedItemsItem.eventDate!,
+                                  lastUpdatedAt:
+                                      generalFeedItemsItem.updatedAt!,
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                     ),
                   ],

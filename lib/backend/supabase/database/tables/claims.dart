@@ -45,4 +45,8 @@ class ClaimsRow extends SupabaseDataRow {
 
   DateTime get createdAt => getField<DateTime>('created_at')!;
   set createdAt(DateTime value) => setField<DateTime>('created_at', value);
+
+  String? get claimerUsername => getField<String>('claimer_username');
+  set claimerUsername(String? value) =>
+      setField<String>('claimer_username', value);
 }

@@ -176,6 +176,29 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: UserNotificationsWidget.routeName,
           path: UserNotificationsWidget.routePath,
           builder: (context, params) => UserNotificationsWidget(),
+        ),
+        FFRoute(
+          name: ManageClaimsWidget.routeName,
+          path: ManageClaimsWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => ManageClaimsWidget(
+            itemId: params.getParam(
+              'itemId',
+              ParamType.String,
+            ),
+            itemName: params.getParam(
+              'itemName',
+              ParamType.String,
+            ),
+            itemCreatedAt: params.getParam(
+              'itemCreatedAt',
+              ParamType.DateTime,
+            ),
+            itemImageUrl: params.getParam(
+              'itemImageUrl',
+              ParamType.String,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

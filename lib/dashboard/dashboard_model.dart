@@ -19,43 +19,25 @@ class DashboardModel extends FlutterFlowModel<DashboardWidget> {
   void updateFeedItemsAtIndex(int index, Function(FeedItemsRow) updateFn) =>
       feedItems[index] = updateFn(feedItems[index]);
 
-  List<FeedFoundItemsRow> feedFoundItems = [];
-  void addToFeedFoundItems(FeedFoundItemsRow item) => feedFoundItems.add(item);
-  void removeFromFeedFoundItems(FeedFoundItemsRow item) =>
-      feedFoundItems.remove(item);
-  void removeAtIndexFromFeedFoundItems(int index) =>
-      feedFoundItems.removeAt(index);
-  void insertAtIndexInFeedFoundItems(int index, FeedFoundItemsRow item) =>
-      feedFoundItems.insert(index, item);
-  void updateFeedFoundItemsAtIndex(
-          int index, Function(FeedFoundItemsRow) updateFn) =>
-      feedFoundItems[index] = updateFn(feedFoundItems[index]);
-
-  List<FeedLostItemsRow> feedLostItems = [];
-  void addToFeedLostItems(FeedLostItemsRow item) => feedLostItems.add(item);
-  void removeFromFeedLostItems(FeedLostItemsRow item) =>
-      feedLostItems.remove(item);
-  void removeAtIndexFromFeedLostItems(int index) =>
-      feedLostItems.removeAt(index);
-  void insertAtIndexInFeedLostItems(int index, FeedLostItemsRow item) =>
-      feedLostItems.insert(index, item);
-  void updateFeedLostItemsAtIndex(
-          int index, Function(FeedLostItemsRow) updateFn) =>
-      feedLostItems[index] = updateFn(feedLostItems[index]);
-
-  bool filterBy = false;
-
   String sortBy = 'Newest First';
 
   String activeFilter = 'none';
 
+  bool filterBy = false;
+
+  int? categoryId = 0;
+
+  String? searchQuery;
+
+  bool isSearchActive = false;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Custom Action - generateGreetingMessage] action in dashboard widget.
-  UserGreetingMessageStruct? generatedGreetingMessage;
+  String? generatedGreetingMessage;
   // Stores action output result for [Custom Action - getCategories] action in dashboard widget.
   List<CategoriesStruct>? fetchedCategories;
-  // Stores action output result for [Custom Action - getSortedFeed] action in dashboard widget.
+  // Stores action output result for [Custom Action - renderFeed] action in dashboard widget.
   List<FeedItemsRow>? initialFeedRows;
   // State field(s) for PageView widget.
   PageController? pageViewController;
@@ -69,26 +51,31 @@ class DashboardModel extends FlutterFlowModel<DashboardWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  // Stores action output result for [Custom Action - renderFeed] action in TextField widget.
+  List<FeedItemsRow>? renderedFeedItemsViaSearch;
+  // Stores action output result for [Custom Action - renderFeed] action in IconButton widget.
+  List<FeedItemsRow>? renderedFeedItemsViaFilter;
+  // Stores action output result for [Custom Action - renderFeed] action in IconButton widget.
+  List<FeedItemsRow>? renderedFeedItemsViaClearFilter;
   // State field(s) for ChoiceChips widget.
   FormFieldController<List<String>>? choiceChipsValueController;
   String? get choiceChipsValue =>
       choiceChipsValueController?.value?.firstOrNull;
   set choiceChipsValue(String? val) =>
       choiceChipsValueController?.value = val != null ? [val] : [];
+  // Stores action output result for [Custom Action - renderFeed] action in ChoiceChips widget.
+  List<FeedItemsRow>? renderedFeedItems;
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
-  // Stores action output result for [Custom Action - getSortedFeed] action in DropDown widget.
-  List<FeedItemsRow>? sortedFeedRows;
+  // Stores action output result for [Custom Action - renderFeed] action in DropDown widget.
+  List<FeedItemsRow>? renderedFeedItemsViaSort;
   // Models for lostItemCard dynamic component.
-  late FlutterFlowDynamicModels<LostItemCardModel> lostItemCardModels1;
-  // Models for lostItemCard dynamic component.
-  late FlutterFlowDynamicModels<LostItemCardModel> lostItemCardModels2;
+  late FlutterFlowDynamicModels<LostItemCardModel> lostItemCardModels;
 
   @override
   void initState(BuildContext context) {
-    lostItemCardModels1 = FlutterFlowDynamicModels(() => LostItemCardModel());
-    lostItemCardModels2 = FlutterFlowDynamicModels(() => LostItemCardModel());
+    lostItemCardModels = FlutterFlowDynamicModels(() => LostItemCardModel());
   }
 
   @override
@@ -96,7 +83,6 @@ class DashboardModel extends FlutterFlowModel<DashboardWidget> {
     textFieldFocusNode?.dispose();
     textController?.dispose();
 
-    lostItemCardModels1.dispose();
-    lostItemCardModels2.dispose();
+    lostItemCardModels.dispose();
   }
 }
