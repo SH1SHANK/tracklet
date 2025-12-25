@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "472212814302",
+    "project_id": "tracklet-z8jijr",
+    "storage_bucket": "tracklet-z8jijr.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472212814302:android:08abddaa477d88fcbfc54f",
+        "android_client_info": {
+          "package_name": "com.shashankstudios.tracklet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFz8l7fV3PftruJgX1wz0leOjJlXX0tjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
