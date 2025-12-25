@@ -14,14 +14,17 @@ class CategoriesRow extends SupabaseDataRow {
   @override
   SupabaseTable get table => CategoriesTable();
 
-  String get id => getField<String>('id')!;
-  set id(String value) => setField<String>('id', value);
+  int get id => getField<int>('id')!;
+  set id(int value) => setField<int>('id', value);
 
   String get name => getField<String>('name')!;
   set name(String value) => setField<String>('name', value);
 
-  String? get iconName => getField<String>('icon_name');
-  set iconName(String? value) => setField<String>('icon_name', value);
+  String get icon => getField<String>('icon')!;
+  set icon(String value) => setField<String>('icon', value);
+
+  bool get isActive => getField<bool>('is_active')!;
+  set isActive(bool value) => setField<bool>('is_active', value);
 
   DateTime get createdAt => getField<DateTime>('created_at')!;
   set createdAt(DateTime value) => setField<DateTime>('created_at', value);

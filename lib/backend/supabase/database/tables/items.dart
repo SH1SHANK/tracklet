@@ -17,36 +17,46 @@ class ItemsRow extends SupabaseDataRow {
   String get id => getField<String>('id')!;
   set id(String value) => setField<String>('id', value);
 
-  String get name => getField<String>('name')!;
-  set name(String value) => setField<String>('name', value);
+  String get userId => getField<String>('user_id')!;
+  set userId(String value) => setField<String>('user_id', value);
+
+  String get intent => getField<String>('intent')!;
+  set intent(String value) => setField<String>('intent', value);
+
+  int? get categoryId => getField<int>('category_id');
+  set categoryId(int? value) => setField<int>('category_id', value);
+
+  String get title => getField<String>('title')!;
+  set title(String value) => setField<String>('title', value);
 
   String get description => getField<String>('description')!;
   set description(String value) => setField<String>('description', value);
 
-  String? get category => getField<String>('category');
-  set category(String? value) => setField<String>('category', value);
+  DateTime? get eventDate => getField<DateTime>('event_date');
+  set eventDate(DateTime? value) => setField<DateTime>('event_date', value);
+
+  List<String> get imageUrls => getListField<String>('image_urls');
+  set imageUrls(List<String>? value) =>
+      setListField<String>('image_urls', value);
+
+  dynamic get contactInfo => getField<dynamic>('contact_info')!;
+  set contactInfo(dynamic value) => setField<dynamic>('contact_info', value);
+
+  bool get revealContact => getField<bool>('reveal_contact')!;
+  set revealContact(bool value) => setField<bool>('reveal_contact', value);
 
   String get status => getField<String>('status')!;
   set status(String value) => setField<String>('status', value);
 
-  String? get imageUrl => getField<String>('image_url');
-  set imageUrl(String? value) => setField<String>('image_url', value);
-
-  String? get locationHint => getField<String>('location_hint');
-  set locationHint(String? value) => setField<String>('location_hint', value);
-
-  String get createdBy => getField<String>('created_by')!;
-  set createdBy(String value) => setField<String>('created_by', value);
-
-  String? get foundBy => getField<String>('found_by');
-  set foundBy(String? value) => setField<String>('found_by', value);
+  int get viewsCount => getField<int>('views_count')!;
+  set viewsCount(int value) => setField<int>('views_count', value);
 
   DateTime get createdAt => getField<DateTime>('created_at')!;
   set createdAt(DateTime value) => setField<DateTime>('created_at', value);
 
-  DateTime? get foundAt => getField<DateTime>('found_at');
-  set foundAt(DateTime? value) => setField<DateTime>('found_at', value);
-
   DateTime get updatedAt => getField<DateTime>('updated_at')!;
   set updatedAt(DateTime value) => setField<DateTime>('updated_at', value);
+
+  dynamic get location => getField<dynamic>('location');
+  set location(dynamic value) => setField<dynamic>('location', value);
 }

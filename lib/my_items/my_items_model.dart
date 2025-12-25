@@ -1,8 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'my_found_items_widget.dart' show MyFoundItemsWidget;
+import 'my_items_widget.dart' show MyItemsWidget;
 import 'package:flutter/material.dart';
 
-class MyFoundItemsModel extends FlutterFlowModel<MyFoundItemsWidget> {
+class MyItemsModel extends FlutterFlowModel<MyItemsWidget> {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for TabBar widget.
