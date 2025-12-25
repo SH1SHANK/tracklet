@@ -44,16 +44,10 @@ class FFAppState extends ChangeNotifier {
 
   late FlutterSecureStorage secureStorage;
 
-  String _primaryGreetingMessage = '';
-  String get primaryGreetingMessage => _primaryGreetingMessage;
-  set primaryGreetingMessage(String value) {
-    _primaryGreetingMessage = value;
-  }
-
-  String _secondaryGreetingMessage = '';
-  String get secondaryGreetingMessage => _secondaryGreetingMessage;
-  set secondaryGreetingMessage(String value) {
-    _secondaryGreetingMessage = value;
+  String _userGreetingMessage = '';
+  String get userGreetingMessage => _userGreetingMessage;
+  set userGreetingMessage(String value) {
+    _userGreetingMessage = value;
   }
 
   List<CategoriesStruct> _categories = [];
