@@ -1674,6 +1674,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                   eventDate: generalFeedItemsItem.eventDate!,
                                   lastUpdatedAt:
                                       generalFeedItemsItem.updatedAt!,
+                                  latLng: GooglePlaceStruct.maybeFromMap(
+                                          generalFeedItemsItem.location)
+                                      ?.address,
                                 ),
                               ),
                             );

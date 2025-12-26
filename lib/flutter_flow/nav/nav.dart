@@ -168,6 +168,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: MyClaimsWidget.routeName,
           path: MyClaimsWidget.routePath,
+          requireAuth: true,
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'myClaims')
               : MyClaimsWidget(),

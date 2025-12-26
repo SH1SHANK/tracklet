@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'user_found_item_model.dart';
@@ -16,7 +17,22 @@ export 'user_found_item_model.dart';
 /// "Mark as Returned." Use a clean, professional white background with a
 /// subtle shadow.
 class UserFoundItemWidget extends StatefulWidget {
-  const UserFoundItemWidget({super.key});
+  const UserFoundItemWidget({
+    super.key,
+    required this.itemName,
+    required this.itemFoundDate,
+    required this.itemFoundLocation,
+    int? claimsCount,
+    required this.itemId,
+    this.itemImageUrl,
+  }) : this.claimsCount = claimsCount ?? 0;
+
+  final String? itemName;
+  final DateTime? itemFoundDate;
+  final String? itemFoundLocation;
+  final int claimsCount;
+  final String? itemId;
+  final String? itemImageUrl;
 
   @override
   State<UserFoundItemWidget> createState() => _UserFoundItemWidgetState();
@@ -81,7 +97,10 @@ class _UserFoundItemWidgetState extends State<UserFoundItemWidget> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Lost Wallet',
+                      valueOrDefault<String>(
+                        widget.itemName,
+                        'Item Name Not Defined',
+                      ),
                       style: FlutterFlowTheme.of(context).titleMedium.override(
                             font: GoogleFonts.outfit(
                               fontWeight: FlutterFlowTheme.of(context)
@@ -152,7 +171,7 @@ class _UserFoundItemWidgetState extends State<UserFoundItemWidget> {
                                   ),
                             ),
                             Text(
-                              'March 15, 2024',
+                              dateTimeFormat("yMMMd", widget.itemFoundDate),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -202,7 +221,10 @@ class _UserFoundItemWidgetState extends State<UserFoundItemWidget> {
                                   ),
                             ),
                             Text(
-                              'Central Park Bench',
+                              valueOrDefault<String>(
+                                widget.itemFoundLocation,
+                                'Item Location Not Defined',
+                              ),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -252,7 +274,10 @@ class _UserFoundItemWidgetState extends State<UserFoundItemWidget> {
                                   ),
                             ),
                             Text(
-                              '3 claims',
+                              '${valueOrDefault<String>(
+                                widget.claimsCount.toString(),
+                                '0',
+                              )} claims',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -290,8 +315,28 @@ class _UserFoundItemWidgetState extends State<UserFoundItemWidget> {
                   children: [
                     Expanded(
                       child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
+                        onPressed: () async {
+                          context.pushNamed(
+                            ManageClaimsWidget.routeName,
+                            queryParameters: {
+                              'itemId': serializeParam(
+                                widget.itemId,
+                                ParamType.String,
+                              ),
+                              'itemName': serializeParam(
+                                widget.itemName,
+                                ParamType.String,
+                              ),
+                              'itemCreatedAt': serializeParam(
+                                widget.itemFoundDate,
+                                ParamType.DateTime,
+                              ),
+                              'itemImageUrl': serializeParam(
+                                widget.itemImageUrl,
+                                ParamType.String,
+                              ),
+                            }.withoutNulls,
+                          );
                         },
                         text: 'View Claims',
                         options: FFButtonOptions(
@@ -323,51 +368,6 @@ class _UserFoundItemWidgetState extends State<UserFoundItemWidget> {
                           borderSide: BorderSide(
                             color: Colors.transparent,
                             width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
-                        },
-                        text: 'Edit',
-                        icon: Icon(
-                          FFIcons.knoteEdit,
-                          size: 18.0,
-                        ),
-                        options: FFButtonOptions(
-                          height: 40.0,
-                          padding: EdgeInsets.all(8.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          textStyle:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    font: GoogleFonts.outfit(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontStyle,
-                                  ),
-                          elevation: 0.0,
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).alternate,
-                            width: 2.0,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),

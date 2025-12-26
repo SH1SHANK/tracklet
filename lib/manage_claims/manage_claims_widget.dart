@@ -200,8 +200,7 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                           style: FlutterFlowTheme.of(context)
                                               .titleMedium
                                               .override(
-                                                font:
-                                                    GoogleFonts.plusJakartaSans(
+                                                font: GoogleFonts.outfit(
                                                   fontWeight: FontWeight.w600,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
@@ -209,6 +208,9 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                                           .titleMedium
                                                           .fontStyle,
                                                 ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w600,
                                                 fontStyle:
@@ -227,8 +229,7 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodySmall
                                                 .override(
-                                                  font: GoogleFonts
-                                                      .plusJakartaSans(
+                                                  font: GoogleFonts.outfit(
                                                     fontWeight:
                                                         FlutterFlowTheme.of(
                                                                 context)

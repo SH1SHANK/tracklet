@@ -10,8 +10,7 @@ class GooglePlaceStruct extends FFFirebaseStruct {
   GooglePlaceStruct({
     String? name,
     String? address,
-    double? lat,
-    double? lng,
+    LatLng? latLng,
     String? city,
     String? state,
     String? country,
@@ -19,8 +18,7 @@ class GooglePlaceStruct extends FFFirebaseStruct {
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _name = name,
         _address = address,
-        _lat = lat,
-        _lng = lng,
+        _latLng = latLng,
         _city = city,
         _state = state,
         _country = country,
@@ -41,23 +39,12 @@ class GooglePlaceStruct extends FFFirebaseStruct {
 
   bool hasAddress() => _address != null;
 
-  // "lat" field.
-  double? _lat;
-  double get lat => _lat ?? 0.0;
-  set lat(double? val) => _lat = val;
+  // "latLng" field.
+  LatLng? _latLng;
+  LatLng? get latLng => _latLng;
+  set latLng(LatLng? val) => _latLng = val;
 
-  void incrementLat(double amount) => lat = lat + amount;
-
-  bool hasLat() => _lat != null;
-
-  // "lng" field.
-  double? _lng;
-  double get lng => _lng ?? 0.0;
-  set lng(double? val) => _lng = val;
-
-  void incrementLng(double amount) => lng = lng + amount;
-
-  bool hasLng() => _lng != null;
+  bool hasLatLng() => _latLng != null;
 
   // "city" field.
   String? _city;
@@ -91,8 +78,7 @@ class GooglePlaceStruct extends FFFirebaseStruct {
       GooglePlaceStruct(
         name: data['name'] as String?,
         address: data['address'] as String?,
-        lat: castToType<double>(data['lat']),
-        lng: castToType<double>(data['lng']),
+        latLng: data['latLng'] as LatLng?,
         city: data['city'] as String?,
         state: data['state'] as String?,
         country: data['country'] as String?,
@@ -106,8 +92,7 @@ class GooglePlaceStruct extends FFFirebaseStruct {
   Map<String, dynamic> toMap() => {
         'name': _name,
         'address': _address,
-        'lat': _lat,
-        'lng': _lng,
+        'latLng': _latLng,
         'city': _city,
         'state': _state,
         'country': _country,
@@ -124,13 +109,9 @@ class GooglePlaceStruct extends FFFirebaseStruct {
           _address,
           ParamType.String,
         ),
-        'lat': serializeParam(
-          _lat,
-          ParamType.double,
-        ),
-        'lng': serializeParam(
-          _lng,
-          ParamType.double,
+        'latLng': serializeParam(
+          _latLng,
+          ParamType.LatLng,
         ),
         'city': serializeParam(
           _city,
@@ -162,14 +143,9 @@ class GooglePlaceStruct extends FFFirebaseStruct {
           ParamType.String,
           false,
         ),
-        lat: deserializeParam(
-          data['lat'],
-          ParamType.double,
-          false,
-        ),
-        lng: deserializeParam(
-          data['lng'],
-          ParamType.double,
+        latLng: deserializeParam(
+          data['latLng'],
+          ParamType.LatLng,
           false,
         ),
         city: deserializeParam(
@@ -202,8 +178,7 @@ class GooglePlaceStruct extends FFFirebaseStruct {
     return other is GooglePlaceStruct &&
         name == other.name &&
         address == other.address &&
-        lat == other.lat &&
-        lng == other.lng &&
+        latLng == other.latLng &&
         city == other.city &&
         state == other.state &&
         country == other.country &&
@@ -212,14 +187,13 @@ class GooglePlaceStruct extends FFFirebaseStruct {
 
   @override
   int get hashCode => const ListEquality()
-      .hash([name, address, lat, lng, city, state, country, zipCode]);
+      .hash([name, address, latLng, city, state, country, zipCode]);
 }
 
 GooglePlaceStruct createGooglePlaceStruct({
   String? name,
   String? address,
-  double? lat,
-  double? lng,
+  LatLng? latLng,
   String? city,
   String? state,
   String? country,
@@ -232,8 +206,7 @@ GooglePlaceStruct createGooglePlaceStruct({
     GooglePlaceStruct(
       name: name,
       address: address,
-      lat: lat,
-      lng: lng,
+      latLng: latLng,
       city: city,
       state: state,
       country: country,

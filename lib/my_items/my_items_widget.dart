@@ -5,6 +5,7 @@ import '/components/user_lost_item_widget.dart';
 import '/flutter_flow/flutter_flow_button_tabbar.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/backend/schema/structs/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'my_items_model.dart';
@@ -60,6 +61,36 @@ class _MyItemsWidgetState extends State<MyItemsWidget>
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {
+                print('FloatingActionButton pressed ...');
+              },
+              backgroundColor: FlutterFlowTheme.of(context).primary,
+              icon: Icon(
+                FFIcons.kaddPlusSquare,
+                color: FlutterFlowTheme.of(context).info,
+                size: 24.0,
+              ),
+              elevation: 8.0,
+              label: Text(
+                _model.tabBarCurrentIndex == 0
+                    ? 'Add Lost Item'
+                    : 'Add Found Item',
+                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      font: GoogleFonts.outfit(
+                        fontWeight: FontWeight.w600,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                      ),
+                      color: FlutterFlowTheme.of(context).info,
+                      fontSize: 16.0,
+                      letterSpacing: 0.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                    ),
+              ),
+            ),
             appBar: AppBar(
               backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
               automaticallyImplyLeading: false,
@@ -219,9 +250,19 @@ class _MyItemsWidgetState extends State<MyItemsWidget>
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     6.0, 0.0, 6.0, 0.0),
-                                            child: UserLostItemWidget(
-                                              key: Key(
-                                                  'Keyhy6_${listViewIndex}_of_${listViewItemsRowList.length}'),
+                                            child: wrapWithModel(
+                                              model: _model.userLostItemModels
+                                                  .getModel(
+                                                listViewItemsRow.id,
+                                                listViewIndex,
+                                              ),
+                                              updateCallback: () =>
+                                                  safeSetState(() {}),
+                                              child: UserLostItemWidget(
+                                                key: Key(
+                                                  'Keyhy6_${listViewItemsRow.id}',
+                                                ),
+                                              ),
                                             ),
                                           );
                                         },
@@ -287,9 +328,33 @@ class _MyItemsWidgetState extends State<MyItemsWidget>
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     6.0, 0.0, 6.0, 0.0),
-                                            child: UserFoundItemWidget(
-                                              key: Key(
-                                                  'Keyuic_${listViewIndex}_of_${listViewItemsRowList.length}'),
+                                            child: wrapWithModel(
+                                              model: _model.userFoundItemModels
+                                                  .getModel(
+                                                listViewItemsRow.id,
+                                                listViewIndex,
+                                              ),
+                                              updateCallback: () =>
+                                                  safeSetState(() {}),
+                                              child: UserFoundItemWidget(
+                                                key: Key(
+                                                  'Keyuic_${listViewItemsRow.id}',
+                                                ),
+                                                itemName:
+                                                    listViewItemsRow.title,
+                                                itemFoundLocation:
+                                                    GooglePlaceStruct
+                                                            .maybeFromMap(
+                                                                listViewItemsRow
+                                                                    .location!)!
+                                                        .name,
+                                                claimsCount: 0,
+                                                itemId: listViewItemsRow.id,
+                                                itemImageUrl: listViewItemsRow
+                                                    .imageUrls.firstOrNull,
+                                                itemFoundDate:
+                                                    listViewItemsRow.eventDate!,
+                                              ),
                                             ),
                                           );
                                         },
