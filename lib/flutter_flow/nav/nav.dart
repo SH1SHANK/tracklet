@@ -97,16 +97,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => CreateAccountWidget(),
         ),
         FFRoute(
-          name: UserDetailsWidget.routeName,
-          path: UserDetailsWidget.routePath,
-          builder: (context, params) => UserDetailsWidget(
-            pageIndex: params.getParam(
-              'pageIndex',
-              ParamType.int,
-            ),
-          ),
-        ),
-        FFRoute(
           name: AuthUsernameWidget.routeName,
           path: AuthUsernameWidget.routePath,
           builder: (context, params) => AuthUsernameWidget(),
@@ -174,15 +164,33 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : MyClaimsWidget(),
         ),
         FFRoute(
-          name: UserNotificationsWidget.routeName,
-          path: UserNotificationsWidget.routePath,
-          builder: (context, params) => UserNotificationsWidget(),
-        ),
-        FFRoute(
           name: ManageClaimsWidget.routeName,
           path: ManageClaimsWidget.routePath,
           requireAuth: true,
           builder: (context, params) => ManageClaimsWidget(
+            itemId: params.getParam(
+              'itemId',
+              ParamType.String,
+            ),
+            itemName: params.getParam(
+              'itemName',
+              ParamType.String,
+            ),
+            itemCreatedAt: params.getParam(
+              'itemCreatedAt',
+              ParamType.DateTime,
+            ),
+            itemImageUrl: params.getParam(
+              'itemImageUrl',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: ManageResponsesWidget.routeName,
+          path: ManageResponsesWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => ManageResponsesWidget(
             itemId: params.getParam(
               'itemId',
               ParamType.String,

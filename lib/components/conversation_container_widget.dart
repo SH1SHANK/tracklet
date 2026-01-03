@@ -176,7 +176,10 @@ class _ConversationContainerWidgetState
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    widget.senderRole,
+                    valueOrDefault<String>(
+                      widget.message,
+                      'Message Not Defined',
+                    ),
                     maxLines: 4,
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.outfit(

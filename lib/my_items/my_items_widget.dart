@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_button_tabbar.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/backend/schema/structs/index.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'my_items_model.dart';
@@ -62,8 +63,8 @@ class _MyItemsWidgetState extends State<MyItemsWidget>
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
             floatingActionButton: FloatingActionButton.extended(
-              onPressed: () {
-                print('FloatingActionButton pressed ...');
+              onPressed: () async {
+                context.pushNamed(ItemLostFormWidget.routeName);
               },
               backgroundColor: FlutterFlowTheme.of(context).primary,
               icon: Icon(
@@ -235,6 +236,16 @@ class _MyItemsWidgetState extends State<MyItemsWidget>
                                       List<ItemsRow> listViewItemsRowList =
                                           snapshot.data!;
 
+                                      if (listViewItemsRowList.isEmpty) {
+                                        return Center(
+                                          child: Image.asset(
+                                            'assets/images/Empty_State_Icon.png',
+                                            width: 200.0,
+                                            height: 600.0,
+                                          ),
+                                        );
+                                      }
+
                                       return ListView.separated(
                                         padding: EdgeInsets.zero,
                                         shrinkWrap: true,
@@ -312,6 +323,16 @@ class _MyItemsWidgetState extends State<MyItemsWidget>
                                       }
                                       List<ItemsRow> listViewItemsRowList =
                                           snapshot.data!;
+
+                                      if (listViewItemsRowList.isEmpty) {
+                                        return Center(
+                                          child: Image.asset(
+                                            'assets/images/Empty_State_Icon.png',
+                                            width: 200.0,
+                                            height: 600.0,
+                                          ),
+                                        );
+                                      }
 
                                       return ListView.separated(
                                         padding: EdgeInsets.zero,

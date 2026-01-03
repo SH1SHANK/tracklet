@@ -9,6 +9,8 @@ class RejectClaimModel extends FlutterFlowModel<RejectClaimWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  // Stores action output result for [Custom Action - rejectClaim] action in Button widget.
+  bool? rejectedClaim;
 
   @override
   void initState(BuildContext context) {}

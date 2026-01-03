@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/supabase/supabase.dart';
+import '/components/empty_state_my_claims_widget.dart';
 import '/components/user_my_claim_card_widget.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -229,6 +230,10 @@ class _MyClaimsWidgetState extends State<MyClaimsWidget> {
                                 List<ClaimsRow> listViewClaimsRowList =
                                     snapshot.data!;
 
+                                if (listViewClaimsRowList.isEmpty) {
+                                  return EmptyStateMyClaimsWidget();
+                                }
+
                                 return ListView.separated(
                                   padding: EdgeInsets.fromLTRB(
                                     0,
@@ -256,7 +261,6 @@ class _MyClaimsWidgetState extends State<MyClaimsWidget> {
                                         ),
                                         itemId: listViewClaimsRow.itemId,
                                         itemName: listViewClaimsRow.itemName!,
-                                        claimMessage: listViewClaimsRow.message,
                                         claimStatus: listViewClaimsRow.status,
                                         claimedAt: listViewClaimsRow.createdAt,
                                         claimId: listViewClaimsRow.id,
@@ -303,6 +307,12 @@ class _MyClaimsWidgetState extends State<MyClaimsWidget> {
                                 List<ClaimsRow> listViewClaimsRowList =
                                     snapshot.data!;
 
+                                if (listViewClaimsRowList.isEmpty) {
+                                  return Center(
+                                    child: EmptyStateMyClaimsWidget(),
+                                  );
+                                }
+
                                 return ListView.separated(
                                   padding: EdgeInsets.fromLTRB(
                                     0,
@@ -330,7 +340,6 @@ class _MyClaimsWidgetState extends State<MyClaimsWidget> {
                                         ),
                                         itemId: listViewClaimsRow.itemId,
                                         itemName: listViewClaimsRow.itemName!,
-                                        claimMessage: listViewClaimsRow.message,
                                         claimStatus: listViewClaimsRow.status,
                                         claimedAt: listViewClaimsRow.createdAt,
                                         claimId: listViewClaimsRow.id,
@@ -377,6 +386,12 @@ class _MyClaimsWidgetState extends State<MyClaimsWidget> {
                                 List<ClaimsRow> listViewClaimsRowList =
                                     snapshot.data!;
 
+                                if (listViewClaimsRowList.isEmpty) {
+                                  return Center(
+                                    child: EmptyStateMyClaimsWidget(),
+                                  );
+                                }
+
                                 return ListView.separated(
                                   padding: EdgeInsets.fromLTRB(
                                     0,
@@ -404,7 +419,6 @@ class _MyClaimsWidgetState extends State<MyClaimsWidget> {
                                         ),
                                         itemId: listViewClaimsRow.itemId,
                                         itemName: listViewClaimsRow.itemName!,
-                                        claimMessage: listViewClaimsRow.message,
                                         claimStatus: listViewClaimsRow.status,
                                         claimedAt: listViewClaimsRow.createdAt,
                                         claimId: listViewClaimsRow.id,
@@ -447,6 +461,12 @@ class _MyClaimsWidgetState extends State<MyClaimsWidget> {
                                 List<ClaimsRow> listViewClaimsRowList =
                                     snapshot.data!;
 
+                                if (listViewClaimsRowList.isEmpty) {
+                                  return Center(
+                                    child: EmptyStateMyClaimsWidget(),
+                                  );
+                                }
+
                                 return ListView.separated(
                                   padding: EdgeInsets.fromLTRB(
                                     0,
@@ -474,7 +494,6 @@ class _MyClaimsWidgetState extends State<MyClaimsWidget> {
                                         ),
                                         itemId: listViewClaimsRow.itemId,
                                         itemName: listViewClaimsRow.itemName!,
-                                        claimMessage: listViewClaimsRow.message,
                                         claimStatus: listViewClaimsRow.status,
                                         claimedAt: listViewClaimsRow.createdAt,
                                         claimId: listViewClaimsRow.id,

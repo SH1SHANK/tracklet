@@ -1,8 +1,9 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/schema/structs/index.dart';
 import '/backend/supabase/supabase.dart';
+import '/components/accept_claim_widget.dart';
 import '/components/conversation_closed_state_widget.dart';
 import '/components/conversation_container_widget.dart';
+import '/components/reject_claim_widget.dart';
 import '/components/response_message_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -18,20 +19,18 @@ class UserClaimCardWidget extends StatefulWidget {
     super.key,
     required this.username,
     required this.createdAt,
-    required this.userDescription,
     required this.claimStatus,
-    required this.proofImages,
-    required this.userContactInfo,
     this.claimId,
+    this.userId,
+    this.responseMessage,
   });
 
   final String? username;
   final DateTime? createdAt;
-  final String? userDescription;
   final String? claimStatus;
-  final List<String>? proofImages;
-  final UserContactInfoStruct? userContactInfo;
   final String? claimId;
+  final String? userId;
+  final String? responseMessage;
 
   @override
   State<UserClaimCardWidget> createState() => _UserClaimCardWidgetState();
@@ -120,10 +119,10 @@ class _UserClaimCardWidgetState extends State<UserClaimCardWidget> {
                                 ),
                           ),
                           Text(
-                            valueOrDefault<String>(
+                            'You Reported This Item as Lost ${valueOrDefault<String>(
                               dateTimeFormat("relative", widget.createdAt),
                               'Created 2 hours ago',
-                            ),
+                            )}',
                             style:
                                 FlutterFlowTheme.of(context).bodySmall.override(
                                       font: GoogleFonts.outfit(
@@ -411,25 +410,55 @@ class _UserClaimCardWidgetState extends State<UserClaimCardWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: FFButtonWidget(
-                              onPressed: () {
-                                print('Button pressed ...');
-                              },
-                              text: 'Accept Claim',
-                              icon: Icon(
-                                FFIcons.kcheck,
-                                size: 18.0,
-                              ),
-                              options: FFButtonOptions(
-                                height: 40.0,
-                                padding: EdgeInsets.all(8.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      font: GoogleFonts.outfit(
+                            child: Builder(
+                              builder: (context) => FFButtonWidget(
+                                onPressed: () async {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (dialogContext) {
+                                      return Dialog(
+                                        elevation: 0,
+                                        insetPadding: EdgeInsets.zero,
+                                        backgroundColor: Colors.transparent,
+                                        alignment:
+                                            AlignmentDirectional(0.0, 0.0)
+                                                .resolve(
+                                                    Directionality.of(context)),
+                                        child: AcceptClaimWidget(
+                                          claimId: widget.claimId!,
+                                          claimerUserId: widget.userId!,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                text: 'Accept Claim',
+                                icon: Icon(
+                                  FFIcons.kcheck,
+                                  size: 18.0,
+                                ),
+                                options: FFButtonOptions(
+                                  height: 40.0,
+                                  padding: EdgeInsets.all(8.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        font: GoogleFonts.outfit(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontStyle,
+                                        ),
+                                        color:
+                                            FlutterFlowTheme.of(context).info,
+                                        letterSpacing: 0.0,
                                         fontWeight: FlutterFlowTheme.of(context)
                                             .labelMedium
                                             .fontWeight,
@@ -437,45 +466,67 @@ class _UserClaimCardWidgetState extends State<UserClaimCardWidget> {
                                             .labelMedium
                                             .fontStyle,
                                       ),
-                                      color: FlutterFlowTheme.of(context).info,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                elevation: 0.0,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1.0,
+                                  elevation: 0.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),
                           Expanded(
-                            child: FFButtonWidget(
-                              onPressed: () {
-                                print('Button pressed ...');
-                              },
-                              text: 'Reject Claim',
-                              icon: Icon(
-                                FFIcons.kx,
-                                size: 18.0,
-                              ),
-                              options: FFButtonOptions(
-                                height: 40.0,
-                                padding: EdgeInsets.all(8.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                iconColor: FlutterFlowTheme.of(context).info,
-                                color: FlutterFlowTheme.of(context).error,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      font: GoogleFonts.outfit(
+                            child: Builder(
+                              builder: (context) => FFButtonWidget(
+                                onPressed: () async {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (dialogContext) {
+                                      return Dialog(
+                                        elevation: 0,
+                                        insetPadding: EdgeInsets.zero,
+                                        backgroundColor: Colors.transparent,
+                                        alignment:
+                                            AlignmentDirectional(0.0, 0.0)
+                                                .resolve(
+                                                    Directionality.of(context)),
+                                        child: RejectClaimWidget(
+                                          claimId: widget.claimId!,
+                                          userId: widget.userId!,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                text: 'Reject Claim',
+                                icon: Icon(
+                                  FFIcons.kx,
+                                  size: 18.0,
+                                ),
+                                options: FFButtonOptions(
+                                  height: 40.0,
+                                  padding: EdgeInsets.all(8.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconColor: FlutterFlowTheme.of(context).info,
+                                  color: FlutterFlowTheme.of(context).error,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        font: GoogleFonts.outfit(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontStyle,
+                                        ),
+                                        color:
+                                            FlutterFlowTheme.of(context).info,
+                                        letterSpacing: 0.0,
                                         fontWeight: FlutterFlowTheme.of(context)
                                             .labelMedium
                                             .fontWeight,
@@ -483,20 +534,12 @@ class _UserClaimCardWidgetState extends State<UserClaimCardWidget> {
                                             .labelMedium
                                             .fontStyle,
                                       ),
-                                      color: FlutterFlowTheme.of(context).info,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                elevation: 0.0,
-                                borderSide: BorderSide(
-                                  width: 0.0,
+                                  elevation: 0.0,
+                                  borderSide: BorderSide(
+                                    width: 0.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),
@@ -511,6 +554,7 @@ class _UserClaimCardWidgetState extends State<UserClaimCardWidget> {
                   updateCallback: () => safeSetState(() {}),
                   child: ConversationClosedStateWidget(
                     claimStatus: widget.claimStatus!,
+                    responseMessage: widget.responseMessage,
                   ),
                 ),
             ],

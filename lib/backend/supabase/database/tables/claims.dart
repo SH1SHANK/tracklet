@@ -23,16 +23,6 @@ class ClaimsRow extends SupabaseDataRow {
   String get claimerUserId => getField<String>('claimer_user_id')!;
   set claimerUserId(String value) => setField<String>('claimer_user_id', value);
 
-  String get message => getField<String>('message')!;
-  set message(String value) => setField<String>('message', value);
-
-  List<String> get proofImages => getListField<String>('proof_images');
-  set proofImages(List<String>? value) =>
-      setListField<String>('proof_images', value);
-
-  dynamic get contactInfo => getField<dynamic>('contact_info')!;
-  set contactInfo(dynamic value) => setField<dynamic>('contact_info', value);
-
   String get status => getField<String>('status')!;
   set status(String value) => setField<String>('status', value);
 

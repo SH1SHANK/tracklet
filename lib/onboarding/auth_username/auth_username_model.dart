@@ -1,5 +1,6 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'auth_username_widget.dart' show AuthUsernameWidget;
 import 'package:flutter/material.dart';
 

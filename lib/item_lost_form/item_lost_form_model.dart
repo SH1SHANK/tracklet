@@ -33,7 +33,6 @@ class ItemLostFormModel extends FlutterFlowModel<ItemLostFormWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  final formKey = GlobalKey<FormState>();
   // State field(s) for ChoiceChips widget.
   FormFieldController<List<String>>? choiceChipsValueController;
   String? get choiceChipsValue =>
@@ -44,28 +43,11 @@ class ItemLostFormModel extends FlutterFlowModel<ItemLostFormWidget> {
   FocusNode? itemNameFocusNode;
   TextEditingController? itemNameTextController;
   String? Function(BuildContext, String?)? itemNameTextControllerValidator;
-  String? _itemNameTextControllerValidator(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'e.g., Black Wallet, Calculator, Earphones is required';
-    }
-
-    return null;
-  }
-
   // State field(s) for itemDescription widget.
   FocusNode? itemDescriptionFocusNode;
   TextEditingController? itemDescriptionTextController;
   String? Function(BuildContext, String?)?
       itemDescriptionTextControllerValidator;
-  String? _itemDescriptionTextControllerValidator(
-      BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'e.g., Blue Samsung phone with a cracked corner and floral case is required';
-    }
-
-    return null;
-  }
-
   // State field(s) for itemCategory widget.
   int? itemCategoryValue;
   FormFieldController<int>? itemCategoryValueController;
@@ -74,15 +56,6 @@ class ItemLostFormModel extends FlutterFlowModel<ItemLostFormWidget> {
   TextEditingController? lastSeenLocationTextController;
   String? Function(BuildContext, String?)?
       lastSeenLocationTextControllerValidator;
-  String? _lastSeenLocationTextControllerValidator(
-      BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'e.g., Mechanical Block – Heat Transfer Lab is required';
-    }
-
-    return null;
-  }
-
   // Stores action output result for [Bottom Sheet - chooseLocationOnMap] action in Container widget.
   LatLng? userSelectedLocation;
   // Stores action output result for [Custom Action - convertLatLngToGooglePlace] action in Container widget.
@@ -100,65 +73,21 @@ class ItemLostFormModel extends FlutterFlowModel<ItemLostFormWidget> {
   TextEditingController? userContactNameTextController;
   String? Function(BuildContext, String?)?
       userContactNameTextControllerValidator;
-  String? _userContactNameTextControllerValidator(
-      BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'e.g., John Doe is required';
-    }
-
-    return null;
-  }
-
   // State field(s) for userContactNumber widget.
   FocusNode? userContactNumberFocusNode;
   TextEditingController? userContactNumberTextController;
   String? Function(BuildContext, String?)?
       userContactNumberTextControllerValidator;
-  String? _userContactNumberTextControllerValidator(
-      BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'e.g., 1800123491 is required';
-    }
-
-    return null;
-  }
-
   // State field(s) for userContactEmail widget.
   FocusNode? userContactEmailFocusNode;
   TextEditingController? userContactEmailTextController;
   String? Function(BuildContext, String?)?
       userContactEmailTextControllerValidator;
-  String? _userContactEmailTextControllerValidator(
-      BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'e.g., JohnDoe@gmail.com is required';
-    }
-
-    if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {
-      return 'Has to be a valid email address.';
-    }
-    return null;
-  }
-
-  // Stores action output result for [Validate Form] action in Button widget.
-  bool? formValidation;
   // Stores action output result for [Backend Call - Insert Row] action in Button widget.
   ItemsRow? listedItemRow;
 
   @override
-  void initState(BuildContext context) {
-    itemNameTextControllerValidator = _itemNameTextControllerValidator;
-    itemDescriptionTextControllerValidator =
-        _itemDescriptionTextControllerValidator;
-    lastSeenLocationTextControllerValidator =
-        _lastSeenLocationTextControllerValidator;
-    userContactNameTextControllerValidator =
-        _userContactNameTextControllerValidator;
-    userContactNumberTextControllerValidator =
-        _userContactNumberTextControllerValidator;
-    userContactEmailTextControllerValidator =
-        _userContactEmailTextControllerValidator;
-  }
+  void initState(BuildContext context) {}
 
   @override
   void dispose() {

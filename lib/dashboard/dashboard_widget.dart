@@ -1545,7 +1545,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                     controller:
                                         _model.choiceChipsValueController ??=
                                             FormFieldController<List<String>>(
-                                      ['All'],
+                                      ['▦ All'],
                                     ),
                                     wrapped: false,
                                   ),
@@ -1637,6 +1637,15 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                     Builder(
                       builder: (context) {
                         final generalFeedItems = _model.feedItems.toList();
+                        if (generalFeedItems.isEmpty) {
+                          return Center(
+                            child: Image.asset(
+                              'assets/images/Empty_State_Icon.png',
+                              width: 200.0,
+                              height: 400.0,
+                            ),
+                          );
+                        }
 
                         return ListView.separated(
                           padding: EdgeInsets.zero,

@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'empty_state_my_claims_model.dart';
@@ -48,7 +49,7 @@ class _EmptyStateMyClaimsWidgetState extends State<EmptyStateMyClaimsWidget> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
-            Icons.inbox_outlined,
+            FFIcons.kbox2,
             color: FlutterFlowTheme.of(context).secondaryText,
             size: 64.0,
           ),
@@ -57,12 +58,13 @@ class _EmptyStateMyClaimsWidgetState extends State<EmptyStateMyClaimsWidget> {
             child: Text(
               'No Claims Yet',
               style: FlutterFlowTheme.of(context).titleMedium.override(
-                    font: GoogleFonts.plusJakartaSans(
+                    font: GoogleFonts.outfit(
                       fontWeight: FontWeight.w600,
                       fontStyle:
                           FlutterFlowTheme.of(context).titleMedium.fontStyle,
                     ),
                     color: FlutterFlowTheme.of(context).primaryText,
+                    fontSize: 20.0,
                     letterSpacing: 0.0,
                     fontWeight: FontWeight.w600,
                     fontStyle:
@@ -83,6 +85,7 @@ class _EmptyStateMyClaimsWidgetState extends State<EmptyStateMyClaimsWidget> {
                           FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                     ),
                     color: FlutterFlowTheme.of(context).secondaryText,
+                    fontSize: 12.0,
                     letterSpacing: 0.0,
                     fontWeight:
                         FlutterFlowTheme.of(context).bodyMedium.fontWeight,
@@ -92,8 +95,8 @@ class _EmptyStateMyClaimsWidgetState extends State<EmptyStateMyClaimsWidget> {
             ),
           ),
           FFButtonWidget(
-            onPressed: () {
-              print('Button pressed ...');
+            onPressed: () async {
+              context.goNamed(DashboardWidget.routeName);
             },
             text: 'Browse Items',
             options: FFButtonOptions(

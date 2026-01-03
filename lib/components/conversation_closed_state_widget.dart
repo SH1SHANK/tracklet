@@ -10,9 +10,11 @@ class ConversationClosedStateWidget extends StatefulWidget {
   const ConversationClosedStateWidget({
     super.key,
     String? claimStatus,
+    this.responseMessage,
   }) : this.claimStatus = claimStatus ?? 'rejected';
 
   final String claimStatus;
+  final String? responseMessage;
 
   @override
   State<ConversationClosedStateWidget> createState() =>
@@ -84,7 +86,7 @@ class _ConversationClosedStateWidgetState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Conversation Closed',
+                    'Conversation Closed As Your Claim Was ${widget.claimStatus}',
                     textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).headlineSmall.override(
                           font: GoogleFonts.outfit(
@@ -106,6 +108,30 @@ class _ConversationClosedStateWidgetState
                   ),
                   Text(
                     'This claim has been processed. Messages are now disabled as the item is marked as ${widget.claimStatus}',
+                    textAlign: TextAlign.center,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          font: GoogleFonts.outfit(
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontStyle,
+                          ),
+                          color: FlutterFlowTheme.of(context).secondaryText,
+                          letterSpacing: 0.0,
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                        ),
+                  ),
+                  Text(
+                    valueOrDefault<String>(
+                      widget.responseMessage,
+                      'No Response Message Was Provided',
+                    ),
                     textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.outfit(

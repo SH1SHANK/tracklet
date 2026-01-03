@@ -261,14 +261,13 @@ const _weatherApiUrl =
 /// Main function to generate personalized greeting message
 /// Returns: String
 Future<String> generateGreetingMessage(
-  String userName,
+  String? userName,
   bool includeWeather,
 ) async {
-  // Input validation
-  final name = userName.trim();
-  if (name.isEmpty) {
-    return _createFallbackGreeting('there');
-  }
+  // Input validation: handle null or empty string
+  final name = (userName == null || userName.trim().isEmpty)
+      ? 'there' // Fallback placeholder to keep the sentence natural
+      : userName.trim();
 
   try {
     String weatherCondition = 'default';
@@ -282,7 +281,8 @@ Future<String> generateGreetingMessage(
 
     final hour = DateTime.now().hour;
 
-    // Return the String directly
+    // The getGreeting logic already uses replaceAll('{name}', name),
+    // so it will now use "there" if no name was provided.
     return _PersonalizedGreetings.getGreeting(weatherCondition, hour, name);
   } catch (e) {
     debugPrint('❌ Error: $e');

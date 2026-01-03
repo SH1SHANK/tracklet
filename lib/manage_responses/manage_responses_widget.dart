@@ -1,13 +1,12 @@
 import '/backend/supabase/supabase.dart';
-import '/components/empty_state_my_claims_widget.dart';
-import '/components/user_claim_card_widget.dart';
+import '/components/user_my_claim_card_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'manage_claims_model.dart';
-export 'manage_claims_model.dart';
+import 'manage_responses_model.dart';
+export 'manage_responses_model.dart';
 
 /// Design a "Manage Claims" page for a specific item.
 ///
@@ -24,8 +23,8 @@ export 'manage_claims_model.dart';
 /// "Your Response" text area displaying the "response_message." Use a clean,
 /// inbox-style UI with distinct dividers and high-contrast touch targets for
 /// all actions.
-class ManageClaimsWidget extends StatefulWidget {
-  const ManageClaimsWidget({
+class ManageResponsesWidget extends StatefulWidget {
+  const ManageResponsesWidget({
     super.key,
     required this.itemId,
     required this.itemName,
@@ -38,22 +37,22 @@ class ManageClaimsWidget extends StatefulWidget {
   final DateTime? itemCreatedAt;
   final String? itemImageUrl;
 
-  static String routeName = 'manageClaims';
-  static String routePath = '/manageClaims';
+  static String routeName = 'manageResponses';
+  static String routePath = '/manageResponses';
 
   @override
-  State<ManageClaimsWidget> createState() => _ManageClaimsWidgetState();
+  State<ManageResponsesWidget> createState() => _ManageResponsesWidgetState();
 }
 
-class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
-  late ManageClaimsModel _model;
+class _ManageResponsesWidgetState extends State<ManageResponsesWidget> {
+  late ManageResponsesModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ManageClaimsModel());
+    _model = createModel(context, () => ManageResponsesModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -68,7 +67,7 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<ClaimsRow>>(
-      stream: _model.manageClaimsSupabaseStream ??= SupaFlow.client
+      stream: _model.manageResponsesSupabaseStream ??= SupaFlow.client
           .from("claims")
           .stream(primaryKey: ['id'])
           .eqOrNull(
@@ -95,10 +94,10 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
             ),
           );
         }
-        List<ClaimsRow> manageClaimsClaimsRowList = snapshot.data!;
+        List<ClaimsRow> manageResponsesClaimsRowList = snapshot.data!;
 
         return Title(
-            title: 'manageClaims',
+            title: 'manageResponses',
             color: FlutterFlowTheme.of(context).primary.withAlpha(0XFF),
             child: GestureDetector(
               onTap: () {
@@ -127,7 +126,7 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                     },
                   ),
                   title: Text(
-                    'Manage Claims',
+                    'Manage Responses',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           font: GoogleFonts.outfit(
                             fontWeight: FontWeight.w600,
@@ -263,7 +262,6 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 8.0, 0.0, 0.0),
                                           child: Container(
-                                            width: 100.0,
                                             height: 24.0,
                                             decoration: BoxDecoration(
                                               color:
@@ -276,8 +274,8 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                               alignment: AlignmentDirectional(
                                                   0.0, 0.0),
                                               child: Text(
-                                                'Total Claims: ${valueOrDefault<String>(
-                                                  manageClaimsClaimsRowList
+                                                'Total Responses: ${valueOrDefault<String>(
+                                                  manageResponsesClaimsRowList
                                                       .length
                                                       .toString(),
                                                   '0',
@@ -327,10 +325,7 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                           child: Builder(
                             builder: (context) {
                               final manageClaimsVar =
-                                  manageClaimsClaimsRowList.toList();
-                              if (manageClaimsVar.isEmpty) {
-                                return EmptyStateMyClaimsWidget();
-                              }
+                                  manageResponsesClaimsRowList.toList();
 
                               return ListView.separated(
                                 padding: EdgeInsets.zero,
@@ -343,19 +338,23 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                   final manageClaimsVarItem =
                                       manageClaimsVar[manageClaimsVarIndex];
                                   return wrapWithModel(
-                                    model: _model.userClaimCardModels.getModel(
+                                    model:
+                                        _model.userMyClaimCardModels.getModel(
                                       manageClaimsVarItem.id,
                                       manageClaimsVarIndex,
                                     ),
                                     updateCallback: () => safeSetState(() {}),
-                                    child: UserClaimCardWidget(
+                                    child: UserMyClaimCardWidget(
                                       key: Key(
-                                        'Keyclo_${manageClaimsVarItem.id}',
+                                        'Key45j_${manageClaimsVarItem.id}',
                                       ),
-                                      username:
-                                          manageClaimsVarItem.claimerUsername!,
+                                      itemId: widget.itemId!,
+                                      itemName: widget.itemName!,
                                       claimStatus: manageClaimsVarItem.status,
-                                      createdAt: manageClaimsVarItem.createdAt,
+                                      claimId: manageClaimsVarItem.id,
+                                      responseMessage:
+                                          manageClaimsVarItem.responseMessage,
+                                      claimedAt: manageClaimsVarItem.createdAt,
                                     ),
                                   );
                                 },

@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'reject_claim_model.dart';
@@ -9,7 +10,14 @@ export 'reject_claim_model.dart';
 /// Create a rejection dialog that asks the user to enter a response message
 /// explaining the rejection, with Cancel and Reject action.
 class RejectClaimWidget extends StatefulWidget {
-  const RejectClaimWidget({super.key});
+  const RejectClaimWidget({
+    super.key,
+    required this.claimId,
+    required this.userId,
+  });
+
+  final String? claimId;
+  final String? userId;
 
   @override
   State<RejectClaimWidget> createState() => _RejectClaimWidgetState();
@@ -70,26 +78,47 @@ class _RejectClaimWidgetState extends State<RejectClaimWidget> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Reject Request',
-                  style: FlutterFlowTheme.of(context).headlineSmall.override(
-                        font: GoogleFonts.outfit(
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .headlineSmall
-                              .fontWeight,
-                          fontStyle: FlutterFlowTheme.of(context)
-                              .headlineSmall
-                              .fontStyle,
-                        ),
-                        color: FlutterFlowTheme.of(context).error,
-                        letterSpacing: 0.0,
-                        fontWeight: FlutterFlowTheme.of(context)
-                            .headlineSmall
-                            .fontWeight,
-                        fontStyle: FlutterFlowTheme.of(context)
-                            .headlineSmall
-                            .fontStyle,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Reject Request',
+                      style:
+                          FlutterFlowTheme.of(context).headlineSmall.override(
+                                font: GoogleFonts.outfit(
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .headlineSmall
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .headlineSmall
+                                      .fontStyle,
+                                ),
+                                color: FlutterFlowTheme.of(context).error,
+                                letterSpacing: 0.0,
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .headlineSmall
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .headlineSmall
+                                    .fontStyle,
+                              ),
+                    ),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        FFIcons.kxBold,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 36.0,
                       ),
+                    ),
+                  ],
                 ),
                 Text(
                   'Please provide a reason for rejecting this request. This message will be sent to the requester.',
@@ -213,8 +242,8 @@ class _RejectClaimWidgetState extends State<RejectClaimWidget> {
               children: [
                 Expanded(
                   child: FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
+                    onPressed: () async {
+                      Navigator.pop(context);
                     },
                     text: 'Cancel',
                     options: FFButtonOptions(
@@ -255,8 +284,30 @@ class _RejectClaimWidgetState extends State<RejectClaimWidget> {
                 ),
                 Expanded(
                   child: FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
+                    onPressed: () async {
+                      _model.rejectedClaim = await actions.rejectClaim(
+                        widget.claimId!,
+                        widget.userId!,
+                        _model.textController.text,
+                      );
+                      if (_model.rejectedClaim!) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Claim rejected. You can review other responses if available.',
+                              style: GoogleFonts.outfit(
+                                color: FlutterFlowTheme.of(context).info,
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            duration: Duration(milliseconds: 4000),
+                            backgroundColor: FlutterFlowTheme.of(context).error,
+                          ),
+                        );
+                      }
+                      Navigator.pop(context);
+
+                      safeSetState(() {});
                     },
                     text: 'Reject',
                     options: FFButtonOptions(

@@ -1,8 +1,6 @@
 // Export pages
 export '/onboarding/create_account/create_account_widget.dart'
     show CreateAccountWidget;
-export '/onboarding/user_details/user_details_widget.dart'
-    show UserDetailsWidget;
 export '/onboarding/auth_username/auth_username_widget.dart'
     show AuthUsernameWidget;
 export '/onboarding/forgot_password/forgot_password_widget.dart'
@@ -15,6 +13,6 @@ export '/user_settings/user_settings_widget.dart' show UserSettingsWidget;
 export '/dashboard/dashboard_widget.dart' show DashboardWidget;
 export '/my_items/my_items_widget.dart' show MyItemsWidget;
 export '/my_claims/my_claims_widget.dart' show MyClaimsWidget;
-export '/user_notifications/user_notifications_widget.dart'
-    show UserNotificationsWidget;
 export '/manage_claims/manage_claims_widget.dart' show ManageClaimsWidget;
+export '/manage_responses/manage_responses_widget.dart'
+    show ManageResponsesWidget;

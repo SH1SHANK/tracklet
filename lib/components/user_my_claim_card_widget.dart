@@ -6,6 +6,7 @@ import '/components/response_message_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,18 +18,18 @@ class UserMyClaimCardWidget extends StatefulWidget {
     super.key,
     required this.itemId,
     required this.itemName,
-    required this.claimMessage,
     required this.claimStatus,
     required this.claimedAt,
     required this.claimId,
+    this.responseMessage,
   });
 
   final String? itemId;
   final String? itemName;
-  final String? claimMessage;
   final String? claimStatus;
   final DateTime? claimedAt;
   final String? claimId;
+  final String? responseMessage;
 
   @override
   State<UserMyClaimCardWidget> createState() => _UserMyClaimCardWidgetState();
@@ -115,7 +116,7 @@ class _UserMyClaimCardWidgetState extends State<UserMyClaimCardWidget> {
                                       ),
                                 ),
                                 Text(
-                                  'Claimed ${dateTimeFormat("relative", widget.claimedAt)}',
+                                  'You Reported This Item as Found ${dateTimeFormat("relative", widget.claimedAt)}',
                                   style: FlutterFlowTheme.of(context)
                                       .labelSmall
                                       .override(
@@ -346,7 +347,7 @@ class _UserMyClaimCardWidgetState extends State<UserMyClaimCardWidget> {
                               context: context,
                               isGlobal: false,
                               avoidOverflow: true,
-                              targetAnchor: AlignmentDirectional(0.0, -1.0)
+                              targetAnchor: AlignmentDirectional(0.0, 0.0)
                                   .resolve(Directionality.of(context)),
                               followerAnchor: AlignmentDirectional(0.0, 0.0)
                                   .resolve(Directionality.of(context)),
@@ -373,7 +374,7 @@ class _UserMyClaimCardWidgetState extends State<UserMyClaimCardWidget> {
                               },
                             );
                           },
-                          text: 'Respond To Owner',
+                          text: 'Respond To Item Owner',
                           icon: Icon(
                             FFIcons.ksend2,
                             size: 24.0,
@@ -426,8 +427,27 @@ class _UserMyClaimCardWidgetState extends State<UserMyClaimCardWidget> {
                         children: [
                           Expanded(
                             child: FFButtonWidget(
-                              onPressed: () {
-                                print('Button pressed ...');
+                              onPressed: () async {
+                                await actions.rejectClaim(
+                                  widget.claimId!,
+                                  currentUserUid,
+                                  'This claim has been withdrawn by the claimant.',
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Your claim was removed. No further action is required.',
+                                      style: GoogleFonts.outfit(
+                                        color:
+                                            FlutterFlowTheme.of(context).info,
+                                        fontSize: 14.0,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 4000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).primary,
+                                  ),
+                                );
                               },
                               text: 'Close Claim',
                               icon: Icon(
@@ -481,6 +501,7 @@ class _UserMyClaimCardWidgetState extends State<UserMyClaimCardWidget> {
                   updateCallback: () => safeSetState(() {}),
                   child: ConversationClosedStateWidget(
                     claimStatus: widget.claimStatus!,
+                    responseMessage: widget.responseMessage,
                   ),
                 ),
             ],
