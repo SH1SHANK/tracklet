@@ -13,21 +13,4 @@
 
 
 
-# LocationPermissionDescriptionforiOS
-<!-- Location Permission Description for iOS -->
-<!-- NSLocationWhenInUseUsageDescription: Required for iOS to request location access -->
-<!-- This message is shown to users when the app requests location permission -->
-<!-- The text explains WHY your app needs location access -->
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>This app needs access to your location to show nearby places and convert coordinates to addresses.</string>
 
-<!-- NSLocationAlwaysUsageDescription: For background location access (if needed) -->
-<!-- Only required if your app needs location when running in the background -->
-<!-- For this custom action, "When In Use" permission is sufficient -->
-<key>NSLocationAlwaysUsageDescription</key>
-<string>This app needs access to your location to show nearby places even when the app is in the background.</string>
-
-<!-- Optional: NSLocationAlwaysAndWhenInUseUsageDescription -->
-<!-- Required for iOS 11+ if you need "Always" access -->
-<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-<string>This app needs access to your location to provide location-based services.</string>

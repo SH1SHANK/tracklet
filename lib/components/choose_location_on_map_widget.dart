@@ -65,7 +65,7 @@ class _ChooseLocationOnMapWidgetState extends State<ChooseLocationOnMapWidget> {
 
     return Container(
       width: double.infinity,
-      height: MediaQuery.sizeOf(context).height * 0.6,
+      height: MediaQuery.sizeOf(context).height * 0.7,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         boxShadow: [
