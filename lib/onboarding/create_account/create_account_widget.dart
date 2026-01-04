@@ -513,45 +513,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                   ),
                                 ),
                               ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      'passwords doesn\'t match',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.outfit(
-                                              fontWeight: FontWeight.w600,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            color: Color(0xFFFF000F),
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        2.0, 0.0, 0.0, 0.0),
-                                    child: Icon(
-                                      FFIcons.kalertTriangle,
-                                      color: Color(0xFFFA000E),
-                                      size: 16.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ],
                           ),
                         ),
@@ -560,7 +521,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                               0.0, 4.0, 0.0, 8.0),
                           child: FFButtonWidget(
                             onPressed: () async {
-                              GoRouter.of(context).prepareAuthEvent();
+                              GoRouter.of(context).prepareAuthEvent(true);
                               if (_model.passwordTextController.text !=
                                   _model.passwordConfirmTextController.text) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -583,8 +544,11 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                 return;
                               }
 
-                              context.goNamedAuth(
-                                  DashboardWidget.routeName, context.mounted);
+                              context.pushNamedAuth(
+                                AuthUsernameWidget.routeName,
+                                context.mounted,
+                                ignoreRedirect: true,
+                              );
                             },
                             text: 'Create Account',
                             options: FFButtonOptions(

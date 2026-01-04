@@ -1,6 +1,8 @@
+import '/backend/supabase/supabase.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'user_lost_item_model.dart';
@@ -16,7 +18,24 @@ export 'user_lost_item_model.dart';
 /// "Edit," and a "Found It!" button to close the listing. Use a
 /// high-contrast, modern card design.
 class UserLostItemWidget extends StatefulWidget {
-  const UserLostItemWidget({super.key});
+  const UserLostItemWidget({
+    super.key,
+    this.itemName,
+    this.itemStatus,
+    this.itemLocation,
+    this.itemDate,
+    this.itemId,
+    this.itemCreatedAt,
+    this.itemImageUrl,
+  });
+
+  final String? itemName;
+  final String? itemStatus;
+  final String? itemLocation;
+  final String? itemDate;
+  final String? itemId;
+  final DateTime? itemCreatedAt;
+  final String? itemImageUrl;
 
   @override
   State<UserLostItemWidget> createState() => _UserLostItemWidgetState();
@@ -68,7 +87,10 @@ class _UserLostItemWidgetState extends State<UserLostItemWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Apple AirPods Pro',
+                    valueOrDefault<String>(
+                      widget.itemName,
+                      'Item Name Not Defined',
+                    ),
                     style: FlutterFlowTheme.of(context).titleMedium.override(
                           font: GoogleFonts.outfit(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -92,13 +114,16 @@ class _UserLostItemWidgetState extends State<UserLostItemWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 4.0, 0.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFF16D54B),
+                        color: FlutterFlowTheme.of(context).primary,
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'Status: Active',
+                          valueOrDefault<String>(
+                            widget.itemStatus,
+                            'Not Active',
+                          ),
                           style:
                               FlutterFlowTheme.of(context).labelSmall.override(
                                     font: GoogleFonts.outfit(
@@ -128,7 +153,7 @@ class _UserLostItemWidgetState extends State<UserLostItemWidget> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.network(
-                        'https://images.unsplash.com/photo-1695634463848-4db4e47703a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY2ODMzOTJ8&ixlib=rb-4.1.0&q=80&w=1080',
+                        widget.itemImageUrl!,
                         width: 80.0,
                         height: 80.0,
                         fit: BoxFit.cover,
@@ -173,7 +198,10 @@ class _UserLostItemWidgetState extends State<UserLostItemWidget> {
                                       ),
                                 ),
                                 Text(
-                                  'Central Park, NYC',
+                                  valueOrDefault<String>(
+                                    widget.itemLocation,
+                                    'NIT Calicut',
+                                  ),
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -235,7 +263,10 @@ class _UserLostItemWidgetState extends State<UserLostItemWidget> {
                                       ),
                                 ),
                                 Text(
-                                  'Dec 15, 2024',
+                                  valueOrDefault<String>(
+                                    widget.itemDate,
+                                    'Dec 15, 2024',
+                                  ),
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -277,8 +308,28 @@ class _UserLostItemWidgetState extends State<UserLostItemWidget> {
                   children: [
                     Expanded(
                       child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
+                        onPressed: () async {
+                          context.pushNamed(
+                            ManageResponsesWidget.routeName,
+                            queryParameters: {
+                              'itemId': serializeParam(
+                                widget.itemId,
+                                ParamType.String,
+                              ),
+                              'itemName': serializeParam(
+                                widget.itemName,
+                                ParamType.String,
+                              ),
+                              'itemCreatedAt': serializeParam(
+                                widget.itemCreatedAt,
+                                ParamType.DateTime,
+                              ),
+                              'itemImageUrl': serializeParam(
+                                widget.itemImageUrl,
+                                ParamType.String,
+                              ),
+                            }.withoutNulls,
+                          );
                         },
                         text: 'View Responses',
                         options: FFButtonOptions(
@@ -315,57 +366,20 @@ class _UserLostItemWidgetState extends State<UserLostItemWidget> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
-                        },
-                        text: 'Edit',
-                        icon: Icon(
-                          FFIcons.knoteEdit,
-                          size: 18.0,
-                        ),
-                        options: FFButtonOptions(
-                          height: 40.0,
-                          padding: EdgeInsets.all(8.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          textStyle:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    font: GoogleFonts.outfit(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontStyle,
-                                  ),
-                          elevation: 0.0,
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).alternate,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
                   ].divide(SizedBox(width: 8.0)),
                 ),
               ),
               FFButtonWidget(
-                onPressed: () {
-                  print('Button pressed ...');
+                onPressed: () async {
+                  await ItemsTable().update(
+                    data: {
+                      'status': 'resolved',
+                    },
+                    matchingRows: (rows) => rows.eqOrNull(
+                      'id',
+                      widget.itemId,
+                    ),
+                  );
                 },
                 text: 'Mark as Found',
                 options: FFButtonOptions(

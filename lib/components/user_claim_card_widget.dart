@@ -1,7 +1,14 @@
-import '/backend/schema/structs/index.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/supabase/supabase.dart';
+import '/components/accept_claim_widget.dart';
+import '/components/conversation_closed_state_widget.dart';
+import '/components/conversation_container_widget.dart';
+import '/components/reject_claim_widget.dart';
+import '/components/response_message_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'user_claim_card_model.dart';
@@ -12,18 +19,18 @@ class UserClaimCardWidget extends StatefulWidget {
     super.key,
     required this.username,
     required this.createdAt,
-    required this.userDescription,
     required this.claimStatus,
-    required this.proofImages,
-    required this.userContactInfo,
+    this.claimId,
+    this.userId,
+    this.responseMessage,
   });
 
   final String? username;
   final DateTime? createdAt;
-  final String? userDescription;
   final String? claimStatus;
-  final List<String>? proofImages;
-  final UserContactInfoStruct? userContactInfo;
+  final String? claimId;
+  final String? userId;
+  final String? responseMessage;
 
   @override
   State<UserClaimCardWidget> createState() => _UserClaimCardWidgetState();
@@ -112,10 +119,10 @@ class _UserClaimCardWidgetState extends State<UserClaimCardWidget> {
                                 ),
                           ),
                           Text(
-                            valueOrDefault<String>(
+                            'You Reported This Item as Lost ${valueOrDefault<String>(
                               dateTimeFormat("relative", widget.createdAt),
                               'Created 2 hours ago',
-                            ),
+                            )}',
                             style:
                                 FlutterFlowTheme.of(context).bodySmall.override(
                                       font: GoogleFonts.outfit(
@@ -246,236 +253,310 @@ class _UserClaimCardWidgetState extends State<UserClaimCardWidget> {
                   ].divide(SizedBox(width: 8.0)),
                 ),
               ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).primaryBackground,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    valueOrDefault<String>(
-                      widget.userDescription,
-                      'I lost this phone at Central Park yesterday around 3 PM. It has a distinctive crack on the back camera and a blue phone case with my initials \'SJ\' on it. I can provide the IMEI number and purchase receipt as proof of ownership.',
-                    ),
-                    maxLines: 4,
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.plusJakartaSans(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
+              StreamBuilder<List<ClaimMessagesRow>>(
+                stream: _model.listViewSupabaseStream ??= SupaFlow.client
+                    .from("claim_messages")
+                    .stream(primaryKey: ['id'])
+                    .eqOrNull(
+                      'claim_id',
+                      widget.claimId,
+                    )
+                    .order('created_at')
+                    .map((list) =>
+                        list.map((item) => ClaimMessagesRow(item)).toList()),
+                builder: (context, snapshot) {
+                  // Customize what your widget looks like when it's loading.
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: SizedBox(
+                        width: 50.0,
+                        height: 50.0,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            FlutterFlowTheme.of(context).primary,
                           ),
-                          fontSize: 14.0,
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 6.0, 0.0, 6.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Proof Images',
-                      style: FlutterFlowTheme.of(context).labelMedium.override(
-                            font: GoogleFonts.outfit(
-                              fontWeight: FontWeight.w600,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .labelMedium
-                                  .fontStyle,
-                            ),
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .labelMedium
-                                .fontStyle,
-                          ),
-                    ),
-                    Builder(
-                      builder: (context) {
-                        final proofImages =
-                            widget.proofImages!.toList().take(5).toList();
+                      ),
+                    );
+                  }
+                  List<ClaimMessagesRow> listViewClaimMessagesRowList =
+                      snapshot.data!;
 
-                        return Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: List.generate(proofImages.length,
-                              (proofImagesIndex) {
-                            final proofImagesItem =
-                                proofImages[proofImagesIndex];
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(6.0),
-                              child: Image.network(
-                                valueOrDefault<String>(
-                                  proofImagesItem,
-                                  'https://images.unsplash.com/photo-1706102817483-1cc6e2c5a34c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY2ODQwNzd8&ixlib=rb-4.1.0&q=80&w=1080',
-                                ),
-                                width: 60.0,
-                                height: 60.0,
-                                fit: BoxFit.cover,
-                              ),
-                            );
-                          }).divide(SizedBox(width: 8.0)),
-                        );
-                      },
-                    ),
-                  ].divide(SizedBox(height: 8.0)),
-                ),
-              ),
-              Divider(
-                height: 1.0,
-                thickness: 1.0,
-                color: FlutterFlowTheme.of(context).alternate,
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 6.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
-                        },
-                        text: 'Accept Claim',
-                        icon: Icon(
-                          FFIcons.kcheck,
-                          size: 18.0,
-                        ),
-                        options: FFButtonOptions(
-                          height: 40.0,
-                          padding: EdgeInsets.all(8.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color: FlutterFlowTheme.of(context).primary,
-                          textStyle:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    font: GoogleFonts.outfit(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context).info,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontStyle,
-                                  ),
-                          elevation: 0.0,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1.0,
+                  return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: listViewClaimMessagesRowList.length,
+                    itemBuilder: (context, listViewIndex) {
+                      final listViewClaimMessagesRow =
+                          listViewClaimMessagesRowList[listViewIndex];
+                      return Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 4.0),
+                        child: wrapWithModel(
+                          model: _model.conversationContainerModels.getModel(
+                            listViewClaimMessagesRow.id,
+                            listViewIndex,
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
-                        },
-                        text: 'Reject Claim',
-                        icon: Icon(
-                          FFIcons.kx,
-                          size: 18.0,
-                        ),
-                        options: FFButtonOptions(
-                          height: 40.0,
-                          padding: EdgeInsets.all(8.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          iconColor: FlutterFlowTheme.of(context).info,
-                          color: FlutterFlowTheme.of(context).error,
-                          textStyle:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    font: GoogleFonts.outfit(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context).info,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .labelMedium
-                                        .fontStyle,
-                                  ),
-                          elevation: 0.0,
-                          borderSide: BorderSide(
-                            width: 0.0,
+                          updateCallback: () => safeSetState(() {}),
+                          child: ConversationContainerWidget(
+                            key: Key(
+                              'Keyonr_${listViewClaimMessagesRow.id}',
+                            ),
+                            senderUsername:
+                                listViewClaimMessagesRow.senderUsername,
+                            senderRole: listViewClaimMessagesRow.senderRole,
+                            message: listViewClaimMessagesRow.message,
+                            claimMessageId: listViewClaimMessagesRow.id,
+                            currentUserRole: 'owner',
+                            createdAt: listViewClaimMessagesRow.createdAt,
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                      ),
-                    ),
-                  ].divide(SizedBox(width: 8.0)),
-                ),
-              ),
-              FFButtonWidget(
-                onPressed: () {
-                  print('Button pressed ...');
+                      );
+                    },
+                  );
                 },
-                text: 'Contact User',
-                icon: Icon(
-                  FFIcons.kbxsContact,
-                  size: 18.0,
-                ),
-                options: FFButtonOptions(
-                  width: double.infinity,
-                  height: 40.0,
-                  padding: EdgeInsets.all(8.0),
-                  iconPadding:
-                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                  color: FlutterFlowTheme.of(context).tertiary,
-                  textStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                        font: GoogleFonts.outfit(
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .fontWeight,
-                          fontStyle: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .fontStyle,
-                        ),
-                        color: FlutterFlowTheme.of(context).info,
-                        fontSize: 16.0,
-                        letterSpacing: 0.0,
-                        fontWeight:
-                            FlutterFlowTheme.of(context).labelMedium.fontWeight,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).labelMedium.fontStyle,
-                      ),
-                  elevation: 0.0,
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
               ),
+              if (widget.claimStatus == 'pending')
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Builder(
+                      builder: (context) => Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 6.0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            await showAlignedDialog(
+                              context: context,
+                              isGlobal: false,
+                              avoidOverflow: true,
+                              targetAnchor: AlignmentDirectional(0.0, -1.0)
+                                  .resolve(Directionality.of(context)),
+                              followerAnchor: AlignmentDirectional(0.0, 0.0)
+                                  .resolve(Directionality.of(context)),
+                              builder: (dialogContext) {
+                                return Material(
+                                  color: Colors.transparent,
+                                  child: ResponseMessageWidget(
+                                    messageCallback:
+                                        (message, proofImages) async {
+                                      await ClaimMessagesTable().insert({
+                                        'claim_id': widget.claimId,
+                                        'sender_username':
+                                            currentUserDisplayName,
+                                        'sender_role': 'owner',
+                                        'message': message,
+                                        'created_at': supaSerialize<DateTime>(
+                                            getCurrentTimestamp),
+                                        'proof_images': proofImages,
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          text: 'Respond To Claimer',
+                          icon: Icon(
+                            FFIcons.ksend2,
+                            size: 24.0,
+                          ),
+                          options: FFButtonOptions(
+                            width: double.infinity,
+                            height: 40.0,
+                            padding: EdgeInsets.all(8.0),
+                            iconAlignment: IconAlignment.end,
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: FlutterFlowTheme.of(context).tertiary,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  font: GoogleFonts.outfit(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .fontStyle,
+                                  ),
+                                  color: FlutterFlowTheme.of(context).info,
+                                  fontSize: 16.0,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .fontStyle,
+                                ),
+                            elevation: 0.0,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 6.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Builder(
+                              builder: (context) => FFButtonWidget(
+                                onPressed: () async {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (dialogContext) {
+                                      return Dialog(
+                                        elevation: 0,
+                                        insetPadding: EdgeInsets.zero,
+                                        backgroundColor: Colors.transparent,
+                                        alignment:
+                                            AlignmentDirectional(0.0, 0.0)
+                                                .resolve(
+                                                    Directionality.of(context)),
+                                        child: AcceptClaimWidget(
+                                          claimId: widget.claimId!,
+                                          claimerUserId: widget.userId!,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                text: 'Accept Claim',
+                                icon: Icon(
+                                  FFIcons.kcheck,
+                                  size: 18.0,
+                                ),
+                                options: FFButtonOptions(
+                                  height: 40.0,
+                                  padding: EdgeInsets.all(8.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        font: GoogleFonts.outfit(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontStyle,
+                                        ),
+                                        color:
+                                            FlutterFlowTheme.of(context).info,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .fontStyle,
+                                      ),
+                                  elevation: 0.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Builder(
+                              builder: (context) => FFButtonWidget(
+                                onPressed: () async {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (dialogContext) {
+                                      return Dialog(
+                                        elevation: 0,
+                                        insetPadding: EdgeInsets.zero,
+                                        backgroundColor: Colors.transparent,
+                                        alignment:
+                                            AlignmentDirectional(0.0, 0.0)
+                                                .resolve(
+                                                    Directionality.of(context)),
+                                        child: RejectClaimWidget(
+                                          claimId: widget.claimId!,
+                                          userId: widget.userId!,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                text: 'Reject Claim',
+                                icon: Icon(
+                                  FFIcons.kx,
+                                  size: 18.0,
+                                ),
+                                options: FFButtonOptions(
+                                  height: 40.0,
+                                  padding: EdgeInsets.all(8.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconColor: FlutterFlowTheme.of(context).info,
+                                  color: FlutterFlowTheme.of(context).error,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        font: GoogleFonts.outfit(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .fontStyle,
+                                        ),
+                                        color:
+                                            FlutterFlowTheme.of(context).info,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .fontStyle,
+                                      ),
+                                  elevation: 0.0,
+                                  borderSide: BorderSide(
+                                    width: 0.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ].divide(SizedBox(width: 8.0)),
+                      ),
+                    ),
+                  ],
+                ),
+              if (widget.claimStatus != 'pending')
+                wrapWithModel(
+                  model: _model.conversationClosedStateModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: ConversationClosedStateWidget(
+                    claimStatus: widget.claimStatus!,
+                    responseMessage: widget.responseMessage,
+                  ),
+                ),
             ],
           ),
         ),

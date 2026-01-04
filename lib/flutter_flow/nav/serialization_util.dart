@@ -264,6 +264,8 @@ dynamic deserializeParam<T>(
             return UserItemsSummaryRow(data);
           case ActiveItemsRow:
             return ActiveItemsRow(data);
+          case ClaimMessagesRow:
+            return ClaimMessagesRow(data);
           case FeedLostItemsRow:
             return FeedLostItemsRow(data);
           case CategoriesRow:

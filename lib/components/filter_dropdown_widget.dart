@@ -132,7 +132,12 @@ class _FilterDropdownWidgetState extends State<FilterDropdownWidget> {
                               12.0, 0.0, 0.0, 0.0),
                           child: Icon(
                             FFIcons.kbasketCheck,
-                            color: FlutterFlowTheme.of(context).primaryText,
+                            color: valueOrDefault<Color>(
+                              widget.activeFilter == 'found'
+                                  ? FlutterFlowTheme.of(context).primary
+                                  : FlutterFlowTheme.of(context).primaryText,
+                              FlutterFlowTheme.of(context).secondaryText,
+                            ),
                             size: 20.0,
                           ),
                         ),
@@ -152,6 +157,14 @@ class _FilterDropdownWidgetState extends State<FilterDropdownWidget> {
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .fontStyle,
+                                    ),
+                                    color: valueOrDefault<Color>(
+                                      widget.activeFilter == 'found'
+                                          ? FlutterFlowTheme.of(context).primary
+                                          : FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                      FlutterFlowTheme.of(context)
+                                          .secondaryText,
                                     ),
                                     fontSize: 14.0,
                                     letterSpacing: 0.0,
@@ -208,7 +221,12 @@ class _FilterDropdownWidgetState extends State<FilterDropdownWidget> {
                               12.0, 0.0, 0.0, 0.0),
                           child: Icon(
                             FFIcons.kbasketQuestion,
-                            color: FlutterFlowTheme.of(context).primaryText,
+                            color: valueOrDefault<Color>(
+                              widget.activeFilter == 'lost'
+                                  ? FlutterFlowTheme.of(context).primary
+                                  : FlutterFlowTheme.of(context).primaryText,
+                              FlutterFlowTheme.of(context).secondaryText,
+                            ),
                             size: 20.0,
                           ),
                         ),
@@ -228,6 +246,14 @@ class _FilterDropdownWidgetState extends State<FilterDropdownWidget> {
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .fontStyle,
+                                    ),
+                                    color: valueOrDefault<Color>(
+                                      widget.activeFilter == 'lost'
+                                          ? FlutterFlowTheme.of(context).primary
+                                          : FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                      FlutterFlowTheme.of(context)
+                                          .secondaryText,
                                     ),
                                     fontSize: 14.0,
                                     letterSpacing: 0.0,

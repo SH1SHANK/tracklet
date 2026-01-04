@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
+import '/index.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -384,18 +385,19 @@ class _AuthUsernameWidgetState extends State<AuthUsernameWidget> {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 8.0, 0.0),
                         child: FFButtonWidget(
-                          onPressed:
-                              !((_model.usernameTextController.text !=
-                                              '') &&
-                                      _model.usernameAvailable)
-                                  ? null
-                                  : () async {
-                                      await currentUserReference!
-                                          .update(createUsersRecordData(
-                                        username:
-                                            _model.usernameTextController.text,
-                                      ));
-                                    },
+                          onPressed: !((_model.usernameTextController.text !=
+                                          '') &&
+                                  _model.usernameAvailable)
+                              ? null
+                              : () async {
+                                  await currentUserReference!
+                                      .update(createUsersRecordData(
+                                    username:
+                                        _model.usernameTextController.text,
+                                  ));
+
+                                  context.goNamed(DashboardWidget.routeName);
+                                },
                           text: 'Continue',
                           icon: Icon(
                             FFIcons.karrowLeftMD,

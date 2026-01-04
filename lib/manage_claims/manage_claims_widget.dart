@@ -1,5 +1,5 @@
-import '/backend/schema/structs/index.dart';
 import '/backend/supabase/supabase.dart';
+import '/components/empty_state_my_claims_widget.dart';
 import '/components/user_claim_card_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -200,8 +200,7 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                           style: FlutterFlowTheme.of(context)
                                               .titleMedium
                                               .override(
-                                                font:
-                                                    GoogleFonts.plusJakartaSans(
+                                                font: GoogleFonts.outfit(
                                                   fontWeight: FontWeight.w600,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
@@ -209,6 +208,9 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                                           .titleMedium
                                                           .fontStyle,
                                                 ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w600,
                                                 fontStyle:
@@ -227,8 +229,7 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodySmall
                                                 .override(
-                                                  font: GoogleFonts
-                                                      .plusJakartaSans(
+                                                  font: GoogleFonts.outfit(
                                                     fontWeight:
                                                         FlutterFlowTheme.of(
                                                                 context)
@@ -327,6 +328,9 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                             builder: (context) {
                               final manageClaimsVar =
                                   manageClaimsClaimsRowList.toList();
+                              if (manageClaimsVar.isEmpty) {
+                                return EmptyStateMyClaimsWidget();
+                              }
 
                               return ListView.separated(
                                 padding: EdgeInsets.zero,
@@ -350,29 +354,8 @@ class _ManageClaimsWidgetState extends State<ManageClaimsWidget> {
                                       ),
                                       username:
                                           manageClaimsVarItem.claimerUsername!,
-                                      userDescription:
-                                          manageClaimsVarItem.message,
                                       claimStatus: manageClaimsVarItem.status,
                                       createdAt: manageClaimsVarItem.createdAt,
-                                      proofImages:
-                                          manageClaimsVarItem.proofImages,
-                                      userContactInfo: UserContactInfoStruct(
-                                        name:
-                                            UserContactInfoStruct.maybeFromMap(
-                                                    manageClaimsVarItem
-                                                        .contactInfo)
-                                                ?.name,
-                                        email:
-                                            UserContactInfoStruct.maybeFromMap(
-                                                    manageClaimsVarItem
-                                                        .contactInfo)
-                                                ?.email,
-                                        phone:
-                                            UserContactInfoStruct.maybeFromMap(
-                                                    manageClaimsVarItem
-                                                        .contactInfo)
-                                                ?.phone,
-                                      ),
                                     ),
                                   );
                                 },

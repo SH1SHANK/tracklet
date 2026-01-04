@@ -2,13 +2,28 @@
     package="com.shashankstudios.tracklet"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" tools:replace="android:maxSdkVersion"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" tools:replace="android:maxSdkVersion"/>
 
     <application
         android:label="Tracklet"
         tools:replace="android:label"
         android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+<!-- Location Permissions for Geolocator Package -->
+<!-- ACCESS_FINE_LOCATION: Allows the app to access precise location using GPS -->
+<!-- This is required for getting the user's exact coordinates with high accuracy -->
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+<!-- ACCESS_COARSE_LOCATION: Allows the app to access approximate location using network -->
+<!-- This provides location data based on WiFi and cell towers (less accurate but faster) -->
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+<!-- Note: These permissions will trigger a runtime permission request dialog -->
+<!-- when the app tries to access location for the first time -->>
 
         <activity
             android:name=".MainActivity"
@@ -55,7 +70,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDcqR8wUh-Ray0oVboSEAwDu3OePy4hKzo"/>
 
 
 

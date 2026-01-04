@@ -2,16 +2,12 @@
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/backend/supabase/supabase.dart';
-import '/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
 import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
-
-import '/custom_code/actions/index.dart';
-import '/flutter_flow/custom_functions.dart';
 
 import 'dart:convert';
 import 'dart:math';
@@ -265,14 +261,13 @@ const _weatherApiUrl =
 /// Main function to generate personalized greeting message
 /// Returns: String
 Future<String> generateGreetingMessage(
-  String userName,
+  String? userName,
   bool includeWeather,
 ) async {
-  // Input validation
-  final name = userName.trim();
-  if (name.isEmpty) {
-    return _createFallbackGreeting('there');
-  }
+  // Input validation: handle null or empty string
+  final name = (userName == null || userName.trim().isEmpty)
+      ? 'there' // Fallback placeholder to keep the sentence natural
+      : userName.trim();
 
   try {
     String weatherCondition = 'default';
@@ -286,7 +281,8 @@ Future<String> generateGreetingMessage(
 
     final hour = DateTime.now().hour;
 
-    // Return the String directly
+    // The getGreeting logic already uses replaceAll('{name}', name),
+    // so it will now use "there" if no name was provided.
     return _PersonalizedGreetings.getGreeting(weatherCondition, hour, name);
   } catch (e) {
     debugPrint('❌ Error: $e');
