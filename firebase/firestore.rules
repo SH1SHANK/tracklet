@@ -5,7 +5,12 @@ service cloud.firestore {
       allow create: if request.auth.uid == document;
       allow read: if request.auth.uid == document;
       allow write: if request.auth.uid == document;
-      allow delete: if request.auth.uid == document;
+      allow delete: if false;
+    }
+
+    match /ff_user_push_notifications/{id} {
+      allow read, update, delete: if false;
+      allow create: if /databases/$(database)/documents/users/$(request.auth.uid) == request.resource.data.sender;
     }
   }
 }

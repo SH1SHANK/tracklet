@@ -1,6 +1,8 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/actions/actions.dart' as action_blocks;
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,10 +17,18 @@ class AcceptClaimWidget extends StatefulWidget {
     super.key,
     required this.claimId,
     required this.claimerUserId,
+    this.itemID,
+    this.itemName,
+    this.itemCreatedAt,
+    this.itemImageUrl,
   });
 
   final String? claimId;
   final String? claimerUserId;
+  final String? itemID;
+  final String? itemName;
+  final DateTime? itemCreatedAt;
+  final String? itemImageUrl;
 
   @override
   State<AcceptClaimWidget> createState() => _AcceptClaimWidgetState();
@@ -320,6 +330,18 @@ class _AcceptClaimWidgetState extends State<AcceptClaimWidget> {
                               backgroundColor:
                                   FlutterFlowTheme.of(context).primary,
                             ),
+                          );
+                          await action_blocks.triggerUserNotification(
+                            context,
+                            recipientUserID: widget.claimerUserId,
+                            itemID: widget.itemID,
+                            itemName: widget.itemName,
+                            itemCreatedAt: widget.itemCreatedAt,
+                            itemImageUrl: widget.itemImageUrl,
+                            notificationTitle:
+                                'Claim accepted for ${widget.itemName}',
+                            notificationDescription:
+                                'Your claim has been accepted by ${currentUserDisplayName}',
                           );
                         }
                         Navigator.pop(context);

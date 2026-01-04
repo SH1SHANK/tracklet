@@ -45,25 +45,31 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       if (RootPageContext.isInactiveRootPage(context)) {
         return;
       }
-      if (!(FFAppState().userGreetingMessage != '')) {
-        _model.generatedGreetingMessage = await actions.generateGreetingMessage(
-          currentUserDisplayName,
-          true,
+      if (currentUserDisplayName != '') {
+        if (!(FFAppState().userGreetingMessage != '')) {
+          _model.generatedGreetingMessage =
+              await actions.generateGreetingMessage(
+            currentUserDisplayName,
+            true,
+          );
+          _model.fetchedCategories = await actions.getCategories();
+          FFAppState().userGreetingMessage = _model.generatedGreetingMessage!;
+          FFAppState().categories =
+              _model.fetchedCategories!.toList().cast<CategoriesStruct>();
+          safeSetState(() {});
+        }
+        _model.initialFeedRows = await actions.renderFeed(
+          '',
+          _model.sortBy,
+          _model.activeFilter,
+          _model.categoryId,
         );
-        _model.fetchedCategories = await actions.getCategories();
-        FFAppState().userGreetingMessage = _model.generatedGreetingMessage!;
-        FFAppState().categories =
-            _model.fetchedCategories!.toList().cast<CategoriesStruct>();
+        _model.feedItems =
+            _model.initialFeedRows!.toList().cast<FeedItemsRow>();
         safeSetState(() {});
+      } else {
+        context.goNamed(AuthUsernameWidget.routeName);
       }
-      _model.initialFeedRows = await actions.renderFeed(
-        '',
-        _model.sortBy,
-        _model.activeFilter,
-        _model.categoryId,
-      );
-      _model.feedItems = _model.initialFeedRows!.toList().cast<FeedItemsRow>();
-      safeSetState(() {});
     });
 
     _model.textController ??= TextEditingController();

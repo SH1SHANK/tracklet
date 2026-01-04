@@ -569,8 +569,19 @@ class _LoginWidgetState extends State<LoginWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 8.0, 0.0, 0.0),
                           child: FFButtonWidget(
-                            onPressed: () {
-                              print('Button pressed ...');
+                            onPressed: () async {
+                              GoRouter.of(context).prepareAuthEvent(true);
+                              final user =
+                                  await authManager.signInWithGoogle(context);
+                              if (user == null) {
+                                return;
+                              }
+
+                              context.goNamedAuth(
+                                AuthUsernameWidget.routeName,
+                                context.mounted,
+                                ignoreRedirect: true,
+                              );
                             },
                             text: 'Continue with Google',
                             icon: Icon(

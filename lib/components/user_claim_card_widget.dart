@@ -8,6 +8,7 @@ import '/components/response_message_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/actions/actions.dart' as action_blocks;
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +24,9 @@ class UserClaimCardWidget extends StatefulWidget {
     this.claimId,
     this.userId,
     this.responseMessage,
+    this.itemID,
+    this.itemName,
+    this.itemImageUrl,
   });
 
   final String? username;
@@ -31,6 +35,9 @@ class UserClaimCardWidget extends StatefulWidget {
   final String? claimId;
   final String? userId;
   final String? responseMessage;
+  final String? itemID;
+  final String? itemName;
+  final String? itemImageUrl;
 
   @override
   State<UserClaimCardWidget> createState() => _UserClaimCardWidgetState();
@@ -351,6 +358,19 @@ class _UserClaimCardWidgetState extends State<UserClaimCardWidget> {
                                             getCurrentTimestamp),
                                         'proof_images': proofImages,
                                       });
+                                      await action_blocks
+                                          .triggerUserNotification(
+                                        context,
+                                        recipientUserID: widget.userId,
+                                        itemID: widget.itemID,
+                                        itemName: widget.itemName,
+                                        itemCreatedAt: widget.createdAt,
+                                        itemImageUrl: widget.itemImageUrl,
+                                        notificationTitle:
+                                            'Message from item owner',
+                                        notificationDescription:
+                                            '${currentUserDisplayName} replied regarding ${widget.itemName}',
+                                      );
                                       Navigator.pop(context);
                                     },
                                   ),

@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
+import '/actions/actions.dart' as action_blocks;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'found_item_model.dart';
@@ -18,10 +19,16 @@ class FoundItemWidget extends StatefulWidget {
     super.key,
     this.itemId,
     this.itemName,
+    this.recipientUserID,
+    this.itemCreatedAt,
+    this.itemImageUrl,
   });
 
   final String? itemId;
   final String? itemName;
+  final String? recipientUserID;
+  final DateTime? itemCreatedAt;
+  final String? itemImageUrl;
 
   @override
   State<FoundItemWidget> createState() => _FoundItemWidgetState();
@@ -504,6 +511,17 @@ class _FoundItemWidgetState extends State<FoundItemWidget> {
                           supaSerialize<DateTime>(getCurrentTimestamp),
                       'proof_images': _model.proofImages,
                     });
+                    await action_blocks.triggerUserNotification(
+                      context,
+                      recipientUserID: widget.recipientUserID,
+                      itemID: widget.itemId,
+                      itemName: widget.itemName,
+                      itemCreatedAt: widget.itemCreatedAt,
+                      itemImageUrl: widget.itemImageUrl,
+                      notificationTitle: 'Someone found your item',
+                      notificationDescription:
+                          '${currentUserDisplayName} {user_name} says they found ${widget.itemName}',
+                    );
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(

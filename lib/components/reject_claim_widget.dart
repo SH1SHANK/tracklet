@@ -1,6 +1,8 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/actions/actions.dart' as action_blocks;
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,10 +16,18 @@ class RejectClaimWidget extends StatefulWidget {
     super.key,
     required this.claimId,
     required this.userId,
+    this.itemID,
+    this.itemName,
+    this.itemCreatedAt,
+    this.itemImageUrl,
   });
 
   final String? claimId;
   final String? userId;
+  final String? itemID;
+  final String? itemName;
+  final DateTime? itemCreatedAt;
+  final String? itemImageUrl;
 
   @override
   State<RejectClaimWidget> createState() => _RejectClaimWidgetState();
@@ -303,6 +313,17 @@ class _RejectClaimWidgetState extends State<RejectClaimWidget> {
                             duration: Duration(milliseconds: 4000),
                             backgroundColor: FlutterFlowTheme.of(context).error,
                           ),
+                        );
+                        await action_blocks.triggerUserNotification(
+                          context,
+                          recipientUserID: widget.userId,
+                          itemID: widget.itemID,
+                          itemName: widget.itemName,
+                          itemCreatedAt: widget.itemCreatedAt,
+                          itemImageUrl: widget.itemImageUrl,
+                          notificationTitle: 'Claim not accepted',
+                          notificationDescription:
+                              '${currentUserDisplayName} has rejected your claim for ${widget.itemName}',
                         );
                       }
                       Navigator.pop(context);
