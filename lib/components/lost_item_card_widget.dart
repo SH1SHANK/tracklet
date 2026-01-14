@@ -60,6 +60,8 @@ class LostItemCardWidget extends StatefulWidget {
     int? viewsCount,
     required this.lastUpdatedAt,
     this.latLng,
+    this.ownerUserId,
+    this.itemImageUrl,
   })  : this.itemID = itemID ?? 'Invalid ItemID',
         this.intent = intent ?? 'intent Not Defined',
         this.catagoryID = catagoryID ?? 'CatagoryID Not Defined',
@@ -78,6 +80,8 @@ class LostItemCardWidget extends StatefulWidget {
   final int viewsCount;
   final DateTime? lastUpdatedAt;
   final String? latLng;
+  final String? ownerUserId;
+  final String? itemImageUrl;
 
   @override
   State<LostItemCardWidget> createState() => _LostItemCardWidgetState();
@@ -179,23 +183,35 @@ class _LostItemCardWidgetState extends State<LostItemCardWidget> {
                                   type: PageTransitionType.fade,
                                   child: FlutterFlowExpandedImageView(
                                     image: Image.network(
-                                      'https://images.unsplash.com/photo-1759999362893-cdf9d3278d4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY0MDIwNDB8&ixlib=rb-4.1.0&q=80&w=1080',
+                                      valueOrDefault<String>(
+                                        widget.itemImageUrl,
+                                        'https://images.unsplash.com/photo-1759999362893-cdf9d3278d4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY0MDIwNDB8&ixlib=rb-4.1.0&q=80&w=1080',
+                                      ),
                                       fit: BoxFit.contain,
                                     ),
                                     allowRotation: false,
-                                    tag: 'imageTag',
+                                    tag: valueOrDefault<String>(
+                                      widget.itemImageUrl,
+                                      'https://images.unsplash.com/photo-1759999362893-cdf9d3278d4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY0MDIwNDB8&ixlib=rb-4.1.0&q=80&w=1080',
+                                    ),
                                     useHeroAnimation: true,
                                   ),
                                 ),
                               );
                             },
                             child: Hero(
-                              tag: 'imageTag',
+                              tag: valueOrDefault<String>(
+                                widget.itemImageUrl,
+                                'https://images.unsplash.com/photo-1759999362893-cdf9d3278d4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY0MDIwNDB8&ixlib=rb-4.1.0&q=80&w=1080',
+                              ),
                               transitionOnUserGestures: true,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.network(
-                                  'https://images.unsplash.com/photo-1759999362893-cdf9d3278d4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY0MDIwNDB8&ixlib=rb-4.1.0&q=80&w=1080',
+                                  valueOrDefault<String>(
+                                    widget.itemImageUrl,
+                                    'https://images.unsplash.com/photo-1759999362893-cdf9d3278d4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY0MDIwNDB8&ixlib=rb-4.1.0&q=80&w=1080',
+                                  ),
                                   width: 118.0,
                                   height: 100.0,
                                   fit: BoxFit.cover,
@@ -709,6 +725,9 @@ class _LostItemCardWidgetState extends State<LostItemCardWidget> {
                                     child: ClaimItemWidget(
                                       itemId: widget.itemID,
                                       itemName: widget.itemName,
+                                      userId: widget.ownerUserId!,
+                                      itemCreatedAt: widget.eventDate,
+                                      itemImageUrl: widget.itemImageUrl,
                                     ),
                                   );
                                 },
@@ -767,6 +786,9 @@ class _LostItemCardWidgetState extends State<LostItemCardWidget> {
                                     child: FoundItemWidget(
                                       itemId: widget.itemID,
                                       itemName: widget.itemName,
+                                      recipientUserID: widget.ownerUserId,
+                                      itemCreatedAt: widget.eventDate,
+                                      itemImageUrl: widget.itemImageUrl,
                                     ),
                                   );
                                 },

@@ -6,6 +6,7 @@ import '/components/response_message_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/actions/actions.dart' as action_blocks;
 import '/custom_code/actions/index.dart' as actions;
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,9 @@ class UserMyClaimCardWidget extends StatefulWidget {
     required this.claimedAt,
     required this.claimId,
     this.responseMessage,
+    this.recipientUserID,
+    this.itemCreatedAt,
+    this.itemImageUrl,
   });
 
   final String? itemId;
@@ -30,6 +34,9 @@ class UserMyClaimCardWidget extends StatefulWidget {
   final DateTime? claimedAt;
   final String? claimId;
   final String? responseMessage;
+  final String? recipientUserID;
+  final DateTime? itemCreatedAt;
+  final String? itemImageUrl;
 
   @override
   State<UserMyClaimCardWidget> createState() => _UserMyClaimCardWidgetState();
@@ -367,6 +374,20 @@ class _UserMyClaimCardWidgetState extends State<UserMyClaimCardWidget> {
                                             getCurrentTimestamp),
                                         'proof_images': proofImages,
                                       });
+                                      await action_blocks
+                                          .triggerUserNotification(
+                                        context,
+                                        recipientUserID:
+                                            widget.recipientUserID,
+                                        itemID: widget.itemId,
+                                        itemName: widget.itemName,
+                                        itemCreatedAt: widget.itemCreatedAt,
+                                        itemImageUrl: widget.itemImageUrl,
+                                        notificationTitle:
+                                            'New message on your item',
+                                        notificationDescription:
+                                            '${currentUserDisplayName} sent a message about ${widget.itemName}',
+                                      );
                                       Navigator.pop(context);
                                     },
                                   ),

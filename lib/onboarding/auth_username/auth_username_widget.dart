@@ -103,7 +103,7 @@ class _AuthUsernameWidgetState extends State<AuthUsernameWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 8.0),
                       child: Text(
-                        'This will be your identity on Attendrix. We’ve suggest you to make something cool—feel free to edit it!',
+                        'This will be your identity on Tracklet. We’ve suggest you to make something cool—feel free to edit it!',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.outfit(
                                 fontWeight: FontWeight.w500,
